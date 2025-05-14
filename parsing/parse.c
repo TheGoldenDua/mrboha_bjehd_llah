@@ -19,7 +19,7 @@ int count_lines(int fd)
         free(line);
     }
     if (count == 0)
-        return(print_error("empty file", NULL), -1);
+        return(-1);
     return count;
 }
 
@@ -33,15 +33,22 @@ char **read_all_lines(char *file , int fd)
     count = 0;
     size = count_lines(fd);
     close(fd);
-    if (size == 0)
+    if (size <= 0)
         return NULL;
-    lines = malloc(sizeof(char *) * (size )); 
+    lines = malloc(sizeof(char *) * (size + 1 )); 
+    if (!lines)
+	    return NULL;
     fd = open(file, O_RDONLY);
     while ((line = get_next_line(fd)))
     {
+        if (count >= size)
+        {    
+            free(line);
+            break;
+        }
         lines[count++] = ft_strdup(line);
-        if(!lines)
-            return NULL;
+        if (!lines[count - 1])
+			return NULL;
         free(line);
     }
     lines[count] = NULL;
@@ -62,7 +69,7 @@ int	parse_identifiers(char **file_content, t_map *map, int *i)
             (*i)++;
             continue;
         }
-
+        
         res = parse_tex(line, map);
         if (res == -1)
             return ( -1);
@@ -104,6 +111,8 @@ int	parse_cub_file(char *file, t_map *map)
 		return (print_error("Could not open file", NULL));
 	file_content = read_all_lines(file, fd);
 	close(fd);
+    if (!file_content)
+	    return (print_error("Empty or invalid file", map), -1);
 	i = 0;
 	if (parse_identifiers(file_content, map, &i) == -1)
 	{
