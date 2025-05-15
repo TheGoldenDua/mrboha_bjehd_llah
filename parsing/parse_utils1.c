@@ -47,12 +47,12 @@ char	*ft_fill_word(char const *s, char c)
 	return (str);
 }
 
-void	*free_split(char **str, size_t *j)
+void	*free_split(char **str)
 {
 	size_t	k;
 
 	k = 0;
-	while (k < *j)
+	while (str && str[k])
 	{
 		free(str[k]);
 		k++;
@@ -80,7 +80,7 @@ char	**ft_split(char const *s, char c)
 			break ;
 		split[j] = ft_fill_word(s, c);
 		if (!split[j])
-			return (free_split(split, &j));
+			return (free_split(split));
 		s += ft_strlen(split[j++]);
 	}
 	split[j] = 0;

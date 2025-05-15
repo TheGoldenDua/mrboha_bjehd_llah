@@ -14,8 +14,8 @@ typedef struct s_map
     char *S_wall;
     char *W_wall;
     char *E_wall;
-    char **Floor_clr;
-    char **Ceiling_clr;
+    int Floor_clr;
+    int Ceiling_clr;
     char **map_grid; 
     int player_x;
     int player_y;
@@ -43,7 +43,9 @@ int set_tex_path(char **texture, char *line);
 int parse_tex(char *line, t_map *map);
 int	set_ceiling_color(t_map *map, char **color);
 int	set_floor_color(t_map *map, char **color);
-int	set_color(char *line, t_map *map);
+// int	set_color(char *line, t_map *map);
+int set_color(int *color_field, char *value);
+int is_valid_identifier(t_map *map, char **token);
 int validate_color_format(char *line);
 int	check_digit_and_range(char *str);
 int	validate_rgb_values(char **color, int comma_count);
@@ -86,9 +88,9 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
 int	ft_isdigit(int c);
 int	ft_count_word(char const *s, char c);
 char	*ft_fill_word(char const *s, char c);
-void	*free_split(char **str, size_t *j);
+void	*free_split(char **str);
 char	**ft_split(char const *s, char c);
 int	is_set(const char *s, char c);
 
-#endif 
+#endif
 

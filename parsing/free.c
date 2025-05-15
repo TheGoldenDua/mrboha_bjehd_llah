@@ -50,8 +50,6 @@ void	free_data(t_map *map)
 	free_wall(&map->S_wall);
 	free_wall(&map->W_wall);
 	free_wall(&map->E_wall);
-	free_array(&map->Floor_clr);
-	free_array(&map->Ceiling_clr);
 	free_map_grid(&map->map_grid);
 }
 

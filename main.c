@@ -6,8 +6,8 @@ void	init_data(t_map *map)
     map->S_wall = NULL;
     map->W_wall = NULL;
     map->E_wall = NULL;
-    map->Ceiling_clr = NULL;
-    map->Floor_clr = NULL;
+    map->Ceiling_clr = -1;
+    map->Floor_clr = -1;
     map->map_grid = NULL;
 }
 

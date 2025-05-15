@@ -1,12 +1,12 @@
 #include "../includes/cub3d.h"
 
-int validate_color_format(char *line)
-{
-    if (!line || (*line != 'F' && *line != 'C') ||
-    !(line[1] == ' ' || (line[1] >= 9 && line[1] <= 13)))
-        return (print_error("Invalid color identifier", NULL));
-    return (0);
-}
+// int validate_color_format(char *line)
+// {
+//     if (!line || (*line != 'F' && *line != 'C') ||
+//     !(line[1] == ' ' || (line[1] >= 9 && line[1] <= 13)))
+//         return (print_error("Invalid color identifier", NULL));
+//     return (0);
+// }
 
 int	check_digit_and_range(char *str)
 {
