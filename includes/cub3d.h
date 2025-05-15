@@ -29,6 +29,7 @@ void	free_wall(char **wall);
 void	free_map_grid(char ***grid);
 void	free_data(t_map *map);
 void free_lines(char **lines);
+void free_textures(t_map *map);
 int print_error(char *msg, t_map *map);
 void	init_data(t_map *map);
 
@@ -39,7 +40,7 @@ int	parse_identifiers(char **file_content, t_map *map, int *i);
 char **read_all_lines(char *file, int fd);
 
 //Parsing textures and colors
-int set_tex_path(char **texture, char *line);
+int set_tex_path(char **texture, char *value);
 int parse_tex(char *line, t_map *map);
 int	set_ceiling_color(t_map *map, char **color);
 int	set_floor_color(t_map *map, char **color);

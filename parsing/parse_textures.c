@@ -1,17 +1,17 @@
 #include "../includes/cub3d.h"
 
-int set_tex_path(char **texture, char *line)
+int set_tex_path(char **texture, char *value)
 {
-    char *path = ft_strtrim(line + 2, " \t\n");
-    if (ft_strchr(path, ' '))
-    {
-        free(path);
-        return (print_error("Texture path contains invalid space", NULL), -1);
-    }
+    char *path = ft_strtrim(value, " \t\n");
     if (!path || path[0] == '\0')
     {
         free(path);
         return (print_error("Invalid texture path", NULL), -1);
+    }
+    if (ft_strchr(path, ' '))
+    {
+        free(path);
+        return (print_error("Texture path contains invalid space", NULL), -1);
     }
 
     if (*texture != NULL)

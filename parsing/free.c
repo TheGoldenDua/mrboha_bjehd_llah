@@ -53,6 +53,19 @@ void	free_data(t_map *map)
 	free_map_grid(&map->map_grid);
 }
 
+void free_textures(t_map *map)
+{
+    if (map->N_wall) free(map->N_wall);
+    if (map->S_wall) free(map->S_wall);
+    if (map->W_wall) free(map->W_wall);
+    if (map->E_wall) free(map->E_wall);
+    map->N_wall = NULL;
+    map->S_wall = NULL;
+    map->W_wall = NULL;
+    map->E_wall = NULL;
+}
+
+
 void free_lines(char **lines)
 {
 	int i = 0;

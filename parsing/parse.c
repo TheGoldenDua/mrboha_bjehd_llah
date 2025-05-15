@@ -161,7 +161,7 @@ int	parse_cub_file(char *file, t_map *map)
 
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
-		return (print_error("Could not open file", NULL));
+		return (print_error("Could not open file", NULL), -1);
 	file_content = read_all_lines(file, fd);
 	close(fd);
     i = 0;
@@ -177,9 +177,9 @@ int	parse_cub_file(char *file, t_map *map)
         }
         tokens = ft_split(line, ' ');
         if(!tokens || !tokens[0] || !tokens[1] || tokens[2])
-            return (free(line), free_split(tokens), print_error("poblem in identifiers!", NULL), -1);
+            return (free_lines(file_content), free(line), free_split(tokens), print_error("poblem in identifiers!", NULL), -1);
         if(is_valid_identifier(map, tokens) == -1)
-            return (free(line), free_split(tokens), print_error("Invalid identifier!", NULL), -1);
+            return (free_lines(file_content), free(line), free_split(tokens), free_textures(map), print_error("Invalid identifier!", NULL), -1);
         else
             count++;
         free(line);
