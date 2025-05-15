@@ -168,7 +168,7 @@ int	parse_cub_file(char *file, t_map *map)
     while(file_content[i] && count < 6)
     {
         line = ft_strtrim(file_content[i], "\t\n\r");
-        if(!line || line[0] == '\0')
+        if (!line || line[0] == '\0')
         {
             free(line);
             i++;
@@ -176,7 +176,7 @@ int	parse_cub_file(char *file, t_map *map)
         }
         tokens = ft_split(line, ' ');
         if(!tokens || !tokens[0] || !tokens[1] || tokens[2])
-            return (free_lines(file_content), free(line), free_split(tokens), print_error("poblem in identifiers!", NULL), -1);
+            return (free_lines(file_content), free(line), free_split(tokens), free_textures(map), print_error("poblem in identifiers!", NULL), -1);
         if(is_valid_identifier(map, tokens) == -1)
             return (free_lines(file_content), free(line), free_split(tokens), free_textures(map), print_error("Invalid identifier!", NULL), -1);
         else
@@ -191,7 +191,8 @@ int	parse_cub_file(char *file, t_map *map)
         i++;
     if (!file_content[i])
         return (free_lines(file_content) ,print_error("No map found in the file", map), -1);
-    if (get_map_info(file_content + i, map) == -1)
+    printf("Starting map parsing at line index: %d\n", i);
+    if (extract_map_from_lines(file_content, i, map) == -1)
         return (free_lines(file_content), -1);
     free_lines(file_content);
 	return (0);

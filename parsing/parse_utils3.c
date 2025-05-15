@@ -70,3 +70,11 @@ int	is_file_content_empty(char **lines)
 	}
 	return (1);
 }
+
+int is_map_start_line(char *line)
+{
+    while (*line == ' ' || *line == '\t')
+        line++;
+    return (*line == '1' || *line == '0' || *line == 'N' || *line == 'S' || *line == 'E' || *line == 'W');
+}
+

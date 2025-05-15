@@ -86,8 +86,10 @@ int	player_count_and_pos(char **map, t_map *data)
 		x = 0;
 		while ((c = map[y][x]))
 		{
+			printf("Checking map[%d][%d] = '%c'\n", y, x, map[y][x]);
 			if (!is_valid_char(c))
-				return (print_error("Invalid character in map", data));
+				return (printf("Invalid char in map: '%c'\n", c),
+					print_error("Invalid character in map", data));
 			if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
 			{
 				data->player_x = x;
@@ -99,6 +101,7 @@ int	player_count_and_pos(char **map, t_map *data)
 		}
 		y++;
 	}
+	printf("Found player '%c' at (%d, %d)\n", c, x, y);
 	if (count == 0)
 		return (print_error("Map missing a player", data));
 	if (count > 1)
@@ -116,9 +119,10 @@ int	validate_map(t_map *map)
 		return (1);
 	if (has_valid_border(map->map_grid))
 		return (1);
-	if (check_space_surroundings(map->map_grid))
-		return (1);
+	printf(">>> Running player_count_and_pos now\n");
 	if (player_count_and_pos(map->map_grid, map))
+		return (1);
+	if (check_space_surroundings(map->map_grid))
 		return (1);
 	// if (check_enclosure(map->map_grid))
 	// // 	return (1);

@@ -9,6 +9,7 @@ void	init_data(t_map *map)
     map->Ceiling_clr = -1;
     map->Floor_clr = -1;
     map->map_grid = NULL;
+    map->map_height = -1;
 }
 
 int	check_extension(char *s)

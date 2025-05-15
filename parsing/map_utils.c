@@ -1,23 +1,49 @@
 #include "../includes/cub3d.h"
 
-int	check_row_walls(char *row)
-{
-	int	i;
+// int	check_row_walls(char *row)
+// {
+// 	int	i;
 
-	i = 0;
-	while (row[i])
-	{
-		if (row[i] == '\n')
-		{
-			i++;
-			continue;
-		}
-		if (row[i] != '1' && row[i] != ' ' && row[i] != '\t')
-			return (print_error("Map must be surrounded by walls", NULL));
-		i++;
-	}
-	return (0);
+// 	i = 0;
+// 	while(row[i] == ' ' || row[i] == '	')
+// 		i++;
+// 	while (row[i])
+// 	{
+// 		if (row[i] == '\n')
+// 		{
+// 			i++;
+// 			continue;
+// 		}
+// 		if (row[i] != '1' && row[i] != ' ' && row[i] != '\t')
+// 			return (print_error("Map must be surrounded by walls", NULL));
+// 		i++;
+// 	}
+// 	return (0);
+// }
+
+int check_row_walls(char *line)
+{
+    int start = 0;
+    int end;
+
+    // Skip leading spaces
+    while (line[start] && line[start] == ' ')
+        start++;
+
+    if (line[start] != '1')
+        return (1); // error: first visible char not a wall
+
+    // Find last visible character
+    end = ft_strlen(line) - 1;
+    while (end > start && (line[end] == ' ' || line[end] == '\n'))
+        end--;
+
+    if (line[end] != '1')
+        return (1); // error: last visible char not a wall
+
+    return (0); // valid row
 }
+
 
 int	check_side_walls(char *row)
 {

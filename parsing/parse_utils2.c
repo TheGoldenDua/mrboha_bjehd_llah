@@ -18,9 +18,13 @@ int	is_map_line(char *line)
 
 int is_empty_line(char *line)
 {
-    while (*line == ' ' || *line == '\t')
+    while (*line)
+    {
+        if (*line != ' ' && *line != '\n')
+            return 0;
         line++;
-    return (*line == '\0');
+    }
+    return 1;
 }
 
 int print_error(char *msg, t_map *map)

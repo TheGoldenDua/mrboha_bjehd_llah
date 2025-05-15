@@ -20,6 +20,7 @@ typedef struct s_map
     int player_x;
     int player_y;
     char player_dir;
+    int map_height;
 }t_map;
 
 
@@ -79,7 +80,8 @@ int	check_minimum_elements(char **map);
 int	player_count_and_pos(char **map, t_map *data);
 int	has_valid_border(char **map);
 int	is_file_content_empty(char **lines);
-
+int extract_map_from_lines(char **file_lines, int start_index, t_map *map);
+int is_map_start_line(char *line);
 //libft utils
 int	ft_atoi(const char *nptr);
 char	*ft_strdup(const char *s);
