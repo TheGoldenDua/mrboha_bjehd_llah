@@ -134,24 +134,23 @@ char **read_all_lines(char *file , int fd)
 int is_valid_identifier(t_map *map, char **token)
 {
     if(ft_strncmp(token[0], "NO", 3) == 0 && !map->N_wall)
-        return (set_tex_path(&map->N_wall, token[1]));
+        return (set_tex_path(&map->N_wall, token[1]), 0);
     else if(ft_strncmp(token[0], "SO", 3) == 0 && !map->S_wall)
-        return (set_tex_path(&map->S_wall, token[1]));
+        return (set_tex_path(&map->S_wall, token[1]), 0);
     else if(ft_strncmp(token[0], "WE", 3) == 0 && !map->W_wall)
-        return (set_tex_path(&map->W_wall, token[1]));
+        return (set_tex_path(&map->W_wall, token[1]), 0);
     else if(ft_strncmp(token[0], "EA", 3) == 0 && !map->E_wall)
-        return (set_tex_path(&map->E_wall, token[1]));
-    else if(ft_strncmp(token[0], "F", 3) == 0 && !map->Floor_clr)
-        return (set_color(&map->Floor_clr, token[1]));
-    else if(ft_strncmp(token[0], "C", 3) == 0 && !map->Ceiling_clr)
-        return (set_color(&map->Ceiling_clr, token[1]));
+        return (set_tex_path(&map->E_wall, token[1]), 0);
+    else if(ft_strncmp(token[0], "F", 2) == 0 && map->Floor_clr == -1)
+        return (set_color(&map->Floor_clr, token[1]), 0);
+    else if(ft_strncmp(token[0], "C", 2) == 0 && map->Ceiling_clr == -1)
+        return (set_color(&map->Ceiling_clr, token[1]), 0);
     else
         return (-1);
 }
 
 int	parse_cub_file(char *file, t_map *map)
 {
-	// init_data(map);
 	int		fd;
 	char	**file_content;
     char **tokens;
