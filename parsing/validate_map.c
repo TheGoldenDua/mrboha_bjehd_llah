@@ -53,45 +53,64 @@ int	check_minimum_elements(char **map)
 	return (0);
 }
 
-int	has_valid_border(char **map)
+int has_valid_border(char **map)
 {
-	int	i;
+	int i = 0;
 
-	if (check_row_walls(map[0]))
-		return (1);
-	i = 0;
+	printf("Checking top row: %s\n", map[0]);
+
+// ✅ Check top row only
+	if (check_row_walls(map[0]) == -1)
+	return print_error("Top border should be walls", NULL);
+
+// ✅ Find last row
 	while (map[i])
 		i++;
-	if (check_row_walls(map[i - 1]))
-		return (1);
-	i = 0;
-	while (map[i])
+
+	// printf("Checking bottom row: %s\n", map[i - 1]);
+	int j = 0;
+	while (map[j])
 	{
-		if (check_side_walls(map[i]))
-			return (1);
-		i++;
+		printf(">> map[%d]: %s\n", j, map[j]);  // add this
+		j++;
 	}
-	return (0);
+
+	// ✅ Check bottom row only
+	if (check_row_walls(map[i - 1]) == -1)
+		return print_error("Bottom border should be walls", NULL);
+
+	// ✅ Check only left/right sides for middle rows
+	for (int j = 1; j < i - 1; j++)
+	{
+		if (check_side_walls(map[j]) == -1)
+			return print_error("Side borders must be walls", NULL);
+	}
+
+	return 0;
 }
 
-int	player_count_and_pos(char **map, t_map *data)
+
+int player_count_and_pos(char **map, t_map *data)
 {
-	int	x, y, count;
-	char	c;
+	int x, y, count;
+	char c = 0;
+
+	printf(">> Entering player_count_and_pos\n");
 
 	y = 0;
 	count = 0;
 	while (map[y])
 	{
+		printf("Scanning Line %d: %s\n", y, map[y]);
 		x = 0;
-		while ((c = map[y][x]))
+		while (map[y][x] != '\0')
 		{
-			printf("Checking map[%d][%d] = '%c'\n", y, x, map[y][x]);
+			c = map[y][x];
 			if (!is_valid_char(c))
-				return (printf("Invalid char in map: '%c'\n", c),
-					print_error("Invalid character in map", data));
+				return print_error("Invalid character in map", data);
 			if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
 			{
+				printf("Found player '%c' at (%d, %d)\n", c, x, y);
 				data->player_x = x;
 				data->player_y = y;
 				data->player_dir = c;
@@ -101,13 +120,47 @@ int	player_count_and_pos(char **map, t_map *data)
 		}
 		y++;
 	}
-	printf("Found player '%c' at (%d, %d)\n", c, x, y);
 	if (count == 0)
-		return (print_error("Map missing a player", data));
+		return print_error("Map missing a player", data);
 	if (count > 1)
-		return (print_error("Map has more than one player", data));
-	return (0);
+		return print_error("Map has more than one player", data);
+	return 0;
 }
+
+
+
+// int player_count_and_pos(char **map, t_map *data)
+// {
+// 	int x, y, count;
+// 	char c = 0;
+
+// 	y = 0;
+// 	count = 0;
+// 	while (map[y])
+// 	{
+// 		x = 0;
+// 		while (map[y][x] != '\0')
+// 		{
+// 			c = map[y][x];
+// 			if (!is_valid_char(c))
+// 				return print_error("Invalid character in map", data);
+// 			if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
+// 			{
+// 				data->player_x = x;
+// 				data->player_y = y;
+// 				data->player_dir = c;
+// 				count++;
+// 			}
+// 			x++;
+// 		}
+// 		y++;
+// 	}
+// 	if (count == 0)
+// 		return print_error("Map missing a player", data);
+// 	if (count > 1)
+// 		return print_error("Map has more than one player", data);
+// 	return 0;
+// }
 
 int	validate_map(t_map *map)
 {
@@ -115,14 +168,17 @@ int	validate_map(t_map *map)
 	return (print_error("Map block not found after identifiers", map));
 	// if (is_map_whitespace_only(map->map_grid))
 	// 	return (print_error("Map is empty or only contains whitespace", map));
-	if (check_minimum_elements(map->map_grid))
-		return (1);
+	// if (check_minimum_elements(map->map_grid))
+	// 	return (1);
 	if (has_valid_border(map->map_grid))
 		return (1);
-	printf(">>> Running player_count_and_pos now\n");
+	printf("=== DEBUG: Printing map->map_grid ===\n");
+	for (int i = 0; map->map_grid[i]; i++)
+    	printf("Line %d: %s\n", i, map->map_grid[i]);
+
 	if (player_count_and_pos(map->map_grid, map))
 		return (1);
-	if (check_space_surroundings(map->map_grid))
+	if (check_space_surroundings(map))
 		return (1);
 	// if (check_enclosure(map->map_grid))
 	// // 	return (1);

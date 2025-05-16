@@ -3,25 +3,33 @@
 int count_lines(int fd)
 {
     char *line;
-    char *trimmed;
+    char *trimmed = NULL;  // ✅ initialized to avoid warnings
     int count = 0;
+
     while ((line = get_next_line(fd)))
     {
-        trimmed = ft_strtrim(line, " \t\r\n");
+        remove_new_line(line);  // ✅ removes only the newline
+
+        trimmed = ft_strtrim(line, " \t\r");  // ✅ removes whitespace ends
         if (!trimmed)
         {
             free(line);
             return (print_error("malloc failed in count_lines", NULL), -1);
         }
-        if (*trimmed != '\0')
+
+        if (*trimmed != '\0')  // ✅ only count if real content exists
             count++;
+
         free(trimmed);
         free(line);
     }
+
     if (count == 0)
-        return(-1);
+        return -1;
+
     return count;
 }
+
 
 char **read_all_lines(char *file , int fd)
 {
@@ -47,6 +55,7 @@ char **read_all_lines(char *file , int fd)
             break;
         }
         lines[count++] = ft_strdup(line);
+        remove_new_line(lines[count - 1]);
         if (!lines[count - 1])
 			return NULL;
         free(line);
@@ -191,8 +200,9 @@ int	parse_cub_file(char *file, t_map *map)
         i++;
     if (!file_content[i])
         return (free_lines(file_content) ,print_error("No map found in the file", map), -1);
-    printf("Starting map parsing at line index: %d\n", i);
-    if (extract_map_from_lines(file_content, i, map) == -1)
+    // printf("Starting map parsing at line index: %d\n", i);
+    printf(">>> DEBUG: parse_cub_file - starting at line index: %d\n", i);
+    if (get_map_info(file_content + i, map) == -1)
         return (free_lines(file_content), -1);
     free_lines(file_content);
 	return (0);

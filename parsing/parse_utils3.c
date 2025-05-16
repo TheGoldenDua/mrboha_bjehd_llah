@@ -73,8 +73,58 @@ int	is_file_content_empty(char **lines)
 
 int is_map_start_line(char *line)
 {
-    while (*line == ' ' || *line == '\t')
-        line++;
-    return (*line == '1' || *line == '0' || *line == 'N' || *line == 'S' || *line == 'E' || *line == 'W');
+	while (*line)
+	{
+		if (*line == '1' || *line == '0' ||
+		    *line == 'N' || *line == 'S' ||
+		    *line == 'E' || *line == 'W')
+			return (1);
+		line++;
+	}
+	return (0);
 }
 
+void remove_new_line(char *line)
+{
+	if (!line)
+		return;
+	int len = ft_strlen(line);
+	if (len > 0 && line[len - 1] == '\n')
+		line[len - 1] = '\0';
+}
+
+void	*ft_memcpy(void *dest, const void *src, size_t n)
+{
+	size_t			i;
+	unsigned char	*s;
+	unsigned char	*d;
+
+	if (dest == src)
+		return (dest);
+	if (!dest && !src)
+		return (NULL);
+	i = 0;
+	s = (unsigned char *)src;
+	d = (unsigned char *)dest;
+	while (i < n)
+	{
+		d[i] = s[i];
+		i++;
+	}
+	return (dest);
+}
+
+void	*ft_memset(void *s, int c, size_t n)
+{
+	unsigned char	*src;
+	size_t			i;
+
+	src = (unsigned char *)s;
+	i = 0;
+	while (i < n)
+	{
+		src[i] = (unsigned char)c;
+		i++;
+	}
+	return (s);
+}

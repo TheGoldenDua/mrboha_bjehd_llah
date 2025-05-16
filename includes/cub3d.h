@@ -62,16 +62,16 @@ int	check_row_walls(char *row);
 int	check_side_walls(char *row);
 int	is_out_of_bounds(char **map, int x, int y);
 int	is_valid_neighbor(char c);
-int	check_space_surroundings(char **map);
+int	check_space_surroundings(t_map *map);
 int	count_real_map_lines(char **map_lines);
-int	copy_real_map_lines(char **map_lines, t_map *map, int max_width);
+int	copy_real_map_lines(char **map_lines, t_map *map);
 int	get_map_info(char **map_lines, t_map *map);
 int	validate_rgb_values(char **color, int comma_count);
 int	check_digit_and_range(char *str);
 int validate_color_format(char *line);
 int	check_all_identifiers(t_map *map);
 int	is_map_line(char *line);
-int is_empty_line(char *line);
+int is_empty_line(const char *line);
 int	validate_map(t_map *map);
 int	check_map_shape_padding(char **map);
 int check_enclosure(char **map);
@@ -94,6 +94,11 @@ char	*ft_fill_word(char const *s, char c);
 void	*free_split(char **str);
 char	**ft_split(char const *s, char c);
 int	is_set(const char *s, char c);
+void remove_new_line(char *line);
+void	*ft_memset(void *s, int c, size_t n);
+void	*ft_memcpy(void *dest, const void *src, size_t n);
+int count_map_height(char **lines);
+
 
 #endif
 

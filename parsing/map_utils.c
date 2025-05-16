@@ -21,28 +21,33 @@
 // 	return (0);
 // }
 
-int check_row_walls(char *line)
+int check_row_walls(char *row)
 {
-    int start = 0;
-    int end;
+    int i = 0;
+	// printf("Checking border row: %s\n", row);
 
-    // Skip leading spaces
-    while (line[start] && line[start] == ' ')
-        start++;
+    // Skip leading spaces/tabs
+    while (row[i] && (row[i] == ' ' || row[i] == '\t'))
+        i++;
 
-    if (line[start] != '1')
-        return (1); // error: first visible char not a wall
-
-    // Find last visible character
-    end = ft_strlen(line) - 1;
-    while (end > start && (line[end] == ' ' || line[end] == '\n'))
-        end--;
-
-    if (line[end] != '1')
-        return (1); // error: last visible char not a wall
-
-    return (0); // valid row
+    // Check that only '1' appears from here on
+    while (row[i])
+    {
+        if (row[i] == ' ' || row[i] == '\t')
+        {
+            i++;
+            continue;
+        }
+        if (row[i] != '1')
+		{
+			printf("Invalid char in border: '%c' (int: %d)\n", row[i], row[i]);
+            return print_error("Top or bottom border must be walls", NULL);
+		}
+		i++;
+    }
+    return 0;
 }
+
 
 
 int	check_side_walls(char *row)
@@ -73,32 +78,31 @@ int	check_side_walls(char *row)
 // 	return (c == '1' || c == ' ');
 // }	
 
-int	check_space_surroundings(char **map)
+int check_space_surroundings(t_map *map)
 {
-	int msize;
-	int width;
-	int x;
-	int y;
+	int y = 1;
+	int x, width;
+	int msize = map->map_height;
 
-	
-	y = 0;
-	msize = count_real_map_lines(map);
-	while(y < msize - 1)
+	printf("sur: %d\n", msize);
+
+	while (y < msize - 1)
 	{
-		x = 0;
-		width = ft_strlen(map[y]);
-		while(x < width)
+		x = 1;
+		width = ft_strlen(map->map_grid[y]);
+		while (x < width - 1)
 		{
-			if (map[y][x] == '0')
+			if (map->map_grid[y][x] == '0')
 			{
-				if (map[y - 1][x] == ' ' || map[y][x + 1] == ' ' || map[y + 1][x] == ' ' || map[y][x - 1] == ' ')
-					return (print_error("Invalid inner map", NULL));
+				if ((int)ft_strlen(map->map_grid[y - 1]) <= x || map->map_grid[y - 1][x] == ' ' ||
+					(int)ft_strlen(map->map_grid[y + 1]) <= x || map->map_grid[y + 1][x] == ' ' ||
+					map->map_grid[y][x + 1] == ' ' || map->map_grid[y][x - 1] == ' ')
+					return print_error("Invalid space near open area", NULL);
 			}
 			x++;
 		}
 		y++;
 	}
 	return 0;
-}	
-
+}
 

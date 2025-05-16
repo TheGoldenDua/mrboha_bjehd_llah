@@ -61,64 +61,88 @@ int	count_real_map_lines(char **map_lines)
 // 	if (validate_map(map) == -1)
 // 		return (-1);
 // 	return (0);
+
+// int count_map_height(char **lines)
+// {
+// 	int count = 0;
+
+// 	printf(">> count_map_height (safe version) CALLED\n");
+
+// 	while (*lines)
+// 	{
+// 		if (**lines != '\0')  // Skip truly empty lines only
+// 			count++;
+
+// 		lines++;
+// 	}
+// 	printf(">> count_map_height FINAL COUNT: %d\n", count);
+// 	return count;
 // }
 
-static int	count_map_height(char **lines, int i)
+int ft_strlen_2d(char **strs)
 {
-	int	found;
-	int	count;
-
-	found = 0;
-	count = 0;
-	while (lines[i])
-	{
-		if (!found && is_empty_line(lines[i]))
-			i++;
-		else
-		{
-			if (!found && is_map_start_line(lines[i]))
-				found = 1;
-			if (found && !is_empty_line(lines[i++]))
-				count++;
-			else
-				i++;
-		}
-	}
-	return (count);
+	int i = 0;
+	while (strs[i])
+		i++;
+	return i;
 }
 
-int	extract_map_from_lines(char **lines, int i, t_map *map)
+int count_map_height(char **lines)
 {
-	int		j;
-	int		found;
-	char	*trim;
+	int count = 0;
 
-	map->map_height = count_map_height(lines, i);
-	map->map_grid = malloc(sizeof(char *) * (map->map_height + 1));
-	if (!map->map_grid)
-		return (print_error("Memory allocation failed", map));
-	j = 0;
-	found = 0;
-	while (lines[i])
+	while (lines[count])
 	{
-		if (!found && is_empty_line(lines[i]))
-			i++;
-		else
+		printf(">> count_map_height sees: \"%s\"\n", lines[count]);  // ✅ Add this
+		count++;
+	}
+
+	printf(">> count_map_height FINAL COUNT: %d\n", count);
+	return count;
+}
+
+
+
+int copy_real_map_lines(char **map_lines, t_map *map)
+{
+	int i = 0;
+	int j = 0;
+	int size = count_map_height(map_lines);
+
+	printf(">>> DEBUG: count_map_height(map_lines) = %d\n", size);
+
+	map->map_grid = malloc(sizeof(char *) * (size + 1));
+	if (!map->map_grid)
+		return print_error("Memory allocation failed", map);
+
+	while (map_lines[i])
+	{
+		printf(">>> Line[%d]: \"%s\"\n", i, map_lines[i]);  // Add this line
+
+		if (!is_empty_line(map_lines[i]))
 		{
-			if (!found && is_map_start_line(lines[i]))
-				found = 1;
-			if (found && !is_empty_line(lines[i]))
-			{
-				trim = ft_strtrim(lines[i], "\n\r\t");
-				if (!trim)
-					return (print_error("Memory allocation failed", map));
-				map->map_grid[j++] = trim;
-			}
-			i++;
+			map->map_grid[j] = ft_strdup(map_lines[i]);
+			printf(">>> COPIED as map[%d]: \"%s\"\n", j, map->map_grid[j]);  // Confirm what got copied
+			j++;
 		}
+		i++;
 	}
 	map->map_grid[j] = NULL;
-	return (validate_map(map) == -1 ? -1 : 0);
+	map->map_height = j;
+	printf(">>> FINAL map->map_height = %d\n", map->map_height);
+	return 0;
 }
+
+
+int get_map_info(char **map_lines, t_map *map)
+{
+	if (copy_real_map_lines(map_lines, map) == -1)
+		return -1;
+	normalize_map(map);
+	if (validate_map(map) == -1)
+		return -1;
+	return 0;
+}
+
 
 
