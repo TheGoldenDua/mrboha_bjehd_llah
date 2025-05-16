@@ -16,17 +16,6 @@ int	is_map_line(char *line)
 	return (*line == '1' || *line == '0');
 }
 
-int is_empty_line(const char *line)
-{
-	while (*line)
-	{
-		if (*line != ' ' && *line != '\t' && *line != '\n' && *line != '\r')
-			return 0;  // Line contains visible content
-		line++;
-	}
-	return 1;  // Line is only whitespace
-}
-
 
 int print_error(char *msg, t_map *map)
 {

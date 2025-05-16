@@ -8,78 +8,45 @@ int	is_valid_char(char c)
 
 int	get_max_width(char **map)
 {
-	int	max;
-	int	len;
-	int	i;
+	int i;
+	int current_len;
+	int max_len;
 
 	i = 0;
-	max = 0;
+	current_len = 0;
+	max_len = 0;
 	while (map[i])
 	{
-		len = ft_strlen(map[i]);
-		if (len > 0 && map[i][len - 1] == '\n')
-			len--;
-		if (len > max)
-			max = len;
+		current_len = ft_strlen(map[i]);
+		if (current_len >= max_len)
+			max_len = current_len;
 		i++;
 	}
-	return (max);
+	return (max_len);
 }
 
-// void	fill_line_spaces(char *line, int max_width)
-// {
-// 	int	len;
-	
-// 	len = ft_strlen(line);
-// 	if (len > 0 && line[len - 1] == '\n')
-// 		len--;
-// 	while (len < max_width)
-// 	{
-// 		line[len++] = ' ';
-// 	}
-// 	line[len] = '\0';
-// }
-
-// void	*ft_memset(void *s, int c, size_t n)
-// {
-// 	unsigned char	*src;
-// 	size_t			i;
-
-// 	src = (unsigned char *)s;
-// 	i = 0;
-// 	while (i < n)
-// 	{
-// 		src[i] = (unsigned char)c;
-// 		i++;
-// 	}
-// 	return (s);
-// }
-
-
-
-void normalize_map(t_map *map)
+void fill_line_spaces(char *line, int max_width, char *map)
 {
-	int max_width = get_max_width(map->map_grid);
-	int i = 0;
-	char *padded;
-	size_t len;
+	int i;
+	int j;
 
-	while (map->map_grid[i])
+	i = 0;
+	j = 0;
+	map = malloc(sizeof(char *) * max_width + 1);
+	while(line[i])
 	{
-		len = ft_strlen(map->map_grid[i]);
-		padded = malloc(max_width + 1);
-		if (!padded)
-		{
-			print_error("Memory allocation failed during normalization", map);
-			return;
-		}
-		ft_memset(padded, ' ', max_width);
-		ft_memcpy(padded, map->map_grid[i], len);
-		padded[max_width] = '\0';
-
-		free(map->map_grid[i]);
-		map->map_grid[i] = padded;
+		map[i] = line[i];
 		i++;
 	}
+	if (i < max_width)
+	{
+		while(i < max_width)
+		{
+			map[i] = ' ';
+			i++;
+		}
+	}
+	map[i] = '\0';
+	printf("%s\n", map);
 }
 

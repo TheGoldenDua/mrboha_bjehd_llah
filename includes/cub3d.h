@@ -24,6 +24,10 @@ typedef struct s_map
 }t_map;
 
 
+
+int	is_line_empty(const char *line);
+
+
 //memory management and error handling
 void	free_array(char ***arr);
 void	free_wall(char **wall);
@@ -47,7 +51,7 @@ int	set_ceiling_color(t_map *map, char **color);
 int	set_floor_color(t_map *map, char **color);
 // int	set_color(char *line, t_map *map);
 int set_color(int *color_field, char *value);
-int is_valid_identifier(t_map *map, char **token);
+int is_valid_identifier(t_map *map, char *token);
 int validate_color_format(char *line);
 int	check_digit_and_range(char *str);
 int	validate_rgb_values(char **color, int comma_count);
@@ -56,16 +60,14 @@ int	validate_rgb_values(char **color, int comma_count);
 int	is_valid_char(char c);
 int	is_surrounded(char **map, int x, int y);
 int	get_max_width(char **map);
-void	fill_line_spaces(char *line, int max_width);
-void	normalize_map(t_map *map);
+void fill_line_spaces(char *line, int max_width, char *map);
 int	check_row_walls(char *row);
 int	check_side_walls(char *row);
 int	is_out_of_bounds(char **map, int x, int y);
 int	is_valid_neighbor(char c);
 int	check_space_surroundings(t_map *map);
-int	count_real_map_lines(char **map_lines);
-int	copy_real_map_lines(char **map_lines, t_map *map);
-int	get_map_info(char **map_lines, t_map *map);
+int	copy_real_map_lines(char **map_lines,int *i, t_map *map);
+int	get_map_info(char **map_lines,int *i, t_map *map);
 int	validate_rgb_values(char **color, int comma_count);
 int	check_digit_and_range(char *str);
 int validate_color_format(char *line);
@@ -97,7 +99,7 @@ int	is_set(const char *s, char c);
 void remove_new_line(char *line);
 void	*ft_memset(void *s, int c, size_t n);
 void	*ft_memcpy(void *dest, const void *src, size_t n);
-int count_map_height(char **lines);
+// int count_map_height(char **lines);
 
 
 #endif
