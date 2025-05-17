@@ -24,13 +24,8 @@
 int check_row_walls(char *row)
 {
     int i = 0;
-	// printf("Checking border row: %s\n", row);
-
-    // Skip leading spaces/tabs
     while (row[i] && (row[i] == ' ' || row[i] == '\t'))
         i++;
-
-    // Check that only '1' appears from here on
     while (row[i])
     {
         if (row[i] == ' ' || row[i] == '\t')
@@ -40,7 +35,6 @@ int check_row_walls(char *row)
         }
         if (row[i] != '1')
 		{
-			printf("Invalid char in border: '%c' (int: %d)\n", row[i], row[i]);
             return print_error("Top or bottom border must be walls", NULL);
 		}
 		i++;

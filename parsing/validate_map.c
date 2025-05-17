@@ -55,35 +55,23 @@ int	check_minimum_elements(char **map)
 
 int has_valid_border(char **map)
 {
-	int i = 0;
+	int i;
+	int j;
 
-	printf("Checking top row: %s\n", map[0]);
-
-// ✅ Check top row only
+	i = 0;
+	j = 1;
 	if (check_row_walls(map[0]) == -1)
-	return print_error("Top border should be walls", NULL);
-
-// ✅ Find last row
+	return (-1);
 	while (map[i])
 		i++;
-
-	// printf("Checking bottom row: %s\n", map[i - 1]);
-	int j = 0;
-	while (map[j])
-	{
-		printf(">> map[%d]: %s\n", j, map[j]);  // add this
-		j++;
-	}
-
-	// ✅ Check bottom row only
 	if (check_row_walls(map[i - 1]) == -1)
-		return print_error("Bottom border should be walls", NULL);
+		return (-1);
 
-	// ✅ Check only left/right sides for middle rows
-	for (int j = 1; j < i - 1; j++)
+	while(j < i - 1)
 	{
 		if (check_side_walls(map[j]) == -1)
-			return print_error("Side borders must be walls", NULL);
+			return (-1);
+		j++;
 	}
 
 	return 0;
