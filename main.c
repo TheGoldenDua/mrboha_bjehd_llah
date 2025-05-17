@@ -32,7 +32,7 @@ int main(int ac, char **av)
         return (printf("Error\n Invalid File Extension\n Correct Extention: <file.cub> \n"), 1);
     init_data(&map);
     if (parse_cub_file(av[1], &map) == -1)
-        return(1);
+        return(free_data(&map), 1);
     free_data(&map);
-    return (EXIT_SUCCESS);
+    return (0);
 }
