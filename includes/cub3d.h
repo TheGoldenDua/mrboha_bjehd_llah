@@ -23,7 +23,8 @@ typedef struct s_map
     int map_height;
 }t_map;
 
-
+int	handle_color_identifier(t_map *map, char **tokens);
+int	handle_texture_identifier(t_map *map, char **tokens);
 int get_map_height(char **lines, int start);
 int	is_line_empty(const char *line);
 char *fill_line_spaces(const char *line, int max_width);

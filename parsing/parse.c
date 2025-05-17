@@ -50,29 +50,36 @@ char **read_all_lines(char *file , int fd)
     lines[count] = NULL;
     return (lines);
 }
-int is_valid_identifier(t_map *map, char *token)
+
+int	is_valid_identifier(t_map *map, char *token)
 {
-    char **tokens = ft_split(token, ' ');
-    int result = -1;
+	char	**tokens;
+	int		result;
 
-    if (!tokens || !tokens[0] || !tokens[1])
-        return (free_array(&tokens), -1);
-
-    if (ft_strncmp(tokens[0], "NO", 3) == 0 && !map->N_wall)
-        result = set_tex_path(&map->N_wall, tokens[1]);
-    else if (ft_strncmp(tokens[0], "SO", 3) == 0 && !map->S_wall)
-        result = set_tex_path(&map->S_wall, tokens[1]);
-    else if (ft_strncmp(tokens[0], "WE", 3) == 0 && !map->W_wall)
-        result = set_tex_path(&map->W_wall, tokens[1]);
-    else if (ft_strncmp(tokens[0], "EA", 3) == 0 && !map->E_wall)
-        result = set_tex_path(&map->E_wall, tokens[1]);
-    else if (ft_strncmp(tokens[0], "F", 2) == 0 && map->Floor_clr == -1)
-        result = set_color(&map->Floor_clr, tokens[1]);
-    else if (ft_strncmp(tokens[0], "C", 2) == 0 && map->Ceiling_clr == -1)
-        result = set_color(&map->Ceiling_clr, tokens[1]);
-    free_array(&tokens);
-    return (result);
+	tokens = ft_split(token, ' ');
+	result = -1;
+	if (!tokens || !tokens[0] || !tokens[1] || tokens[2])
+	{
+		print_error(
+			"Identifiers must contain only the identifier and the path/color",
+			NULL
+		);
+		return (free_array(&tokens), -1);
+	}
+	if (!ft_strncmp(tokens[0], "NO", 3) || !ft_strncmp(tokens[0], "SO", 3)
+		|| !ft_strncmp(tokens[0], "WE", 3) || !ft_strncmp(tokens[0], "EA", 3))
+		result = handle_texture_identifier(map, tokens);
+	else if (!ft_strncmp(tokens[0], "F", 2) || !ft_strncmp(tokens[0], "C", 2))
+		result = handle_color_identifier(map, tokens);
+	else
+	{
+		print_error("Unknown identifier type", NULL);
+		result = -1;
+	}
+	free_array(&tokens);
+	return (result);
 }
+
 
 int	is_line_empty(const char *line)
 {
@@ -102,7 +109,9 @@ int	parse_cub_file(char *file, t_map *map)
     {
         if (!is_line_empty(file_content[i]))
         {
-            is_valid_identifier(map, file_content[i]);
+            // is_valid_identifier(map, file_content[i]);
+            if (is_valid_identifier(map, file_content[i]) == -1)
+			    return (free_lines(file_content), -1);
             count++;
         }
         i++;

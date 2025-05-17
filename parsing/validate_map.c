@@ -60,8 +60,10 @@ int has_valid_border(char **map)
 
 	i = 0;
 	j = 1;
+	if (!map || !map[0])
+   	 	return print_error("Map is empty", NULL);
 	if (check_row_walls(map[0]) == -1)
-	return (-1);
+		return (-1);
 	while (map[i])
 		i++;
 	if (check_row_walls(map[i - 1]) == -1)
