@@ -25,28 +25,28 @@ int	get_max_width(char **map)
 	return (max_len);
 }
 
-void fill_line_spaces(char *line, int max_width, char *map)
+char *fill_line_spaces(const char *line, int max_width)
 {
-	int i;
-	int j;
+    int     i;
+    char    *padded_line;
 
-	i = 0;
-	j = 0;
-	map = malloc(sizeof(char *) * max_width + 1);
-	while(line[i])
-	{
-		map[i] = line[i];
-		i++;
-	}
-	if (i < max_width)
-	{
-		while(i < max_width)
-		{
-			map[i] = ' ';
-			i++;
-		}
-	}
-	map[i] = '\0';
-	printf("%s\n", map);
+    padded_line = malloc(sizeof(char) * (max_width + 1));
+    if (!padded_line)
+        return (NULL); // Handle malloc failure
+
+    i = 0;
+    while (line[i])
+    {
+        padded_line[i] = line[i];
+        i++;
+    }
+    while (i < max_width)
+    {
+        padded_line[i] = ' ';
+        i++;
+    }
+    padded_line[i] = '\0';
+    return (padded_line);
 }
+
 

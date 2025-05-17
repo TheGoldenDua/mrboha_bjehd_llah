@@ -86,13 +86,11 @@ int	parse_cub_file(char *file, t_map *map)
 {
 	int		fd;
 	char	**file_content;
-    char    *line;
 	int		i;
     int     count;
 
     i = 0;
     count = 0;
-    line = NULL;
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 		return (print_error("Could not open file", NULL), -1);
@@ -107,8 +105,8 @@ int	parse_cub_file(char *file, t_map *map)
         i++;
     }
     count = 0;
-    int *index = 0;
-    *index = i;
+    int index = 0;
+    index = i;
     while(file_content[i] != NULL)
     {
         if (!is_line_empty(file_content[i]))
@@ -116,7 +114,7 @@ int	parse_cub_file(char *file, t_map *map)
         i++;
     }
     map->map_grid = (char **)malloc(sizeof(char *) * count + 1);
-    if (get_map_info(file_content, index, map) == -1)
+    if (get_map_info(file_content, &index, map) == -1)
     {
         return -1;
     }

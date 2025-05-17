@@ -24,9 +24,9 @@ typedef struct s_map
 }t_map;
 
 
-
+int get_map_height(char **lines, int start);
 int	is_line_empty(const char *line);
-
+char *fill_line_spaces(const char *line, int max_width);
 
 //memory management and error handling
 void	free_array(char ***arr);
@@ -60,7 +60,7 @@ int	validate_rgb_values(char **color, int comma_count);
 int	is_valid_char(char c);
 int	is_surrounded(char **map, int x, int y);
 int	get_max_width(char **map);
-void fill_line_spaces(char *line, int max_width, char *map);
+// void fill_line_spaces(char *line, int max_width, char *map);
 int	check_row_walls(char *row);
 int	check_side_walls(char *row);
 int	is_out_of_bounds(char **map, int x, int y);
