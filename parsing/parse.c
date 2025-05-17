@@ -50,25 +50,28 @@ char **read_all_lines(char *file , int fd)
     lines[count] = NULL;
     return (lines);
 }
-
 int is_valid_identifier(t_map *map, char *token)
 {
-    char **tokens;
-    tokens = ft_split(token, ' ');
-    if(ft_strncmp(tokens[0], "NO", 3) == 0 && !map->N_wall)
-        return (set_tex_path(&map->N_wall, tokens[1]), 0);
-    else if(ft_strncmp(tokens[0], "SO", 3) == 0 && !map->S_wall)
-        return (set_tex_path(&map->S_wall, tokens[1]), 0);
-    else if(ft_strncmp(tokens[0], "WE", 3) == 0 && !map->W_wall)
-        return (set_tex_path(&map->W_wall, tokens[1]), 0);
-    else if(ft_strncmp(tokens[0], "EA", 3) == 0 && !map->E_wall)
-        return (set_tex_path(&map->E_wall, tokens[1]), 0);
-    else if(ft_strncmp(tokens[0], "F", 2) == 0 && map->Floor_clr == -1)
-        return (set_color(&map->Floor_clr, tokens[1]), 0);
-    else if(ft_strncmp(tokens[0], "C", 2) == 0 && map->Ceiling_clr == -1)
-        return (set_color(&map->Ceiling_clr, tokens[1]), 0);
-    else
-        return (-1);
+    char **tokens = ft_split(token, ' ');
+    int result = -1;
+
+    if (!tokens || !tokens[0] || !tokens[1])
+        return (free_array(&tokens), -1);
+
+    if (ft_strncmp(tokens[0], "NO", 3) == 0 && !map->N_wall)
+        result = set_tex_path(&map->N_wall, tokens[1]);
+    else if (ft_strncmp(tokens[0], "SO", 3) == 0 && !map->S_wall)
+        result = set_tex_path(&map->S_wall, tokens[1]);
+    else if (ft_strncmp(tokens[0], "WE", 3) == 0 && !map->W_wall)
+        result = set_tex_path(&map->W_wall, tokens[1]);
+    else if (ft_strncmp(tokens[0], "EA", 3) == 0 && !map->E_wall)
+        result = set_tex_path(&map->E_wall, tokens[1]);
+    else if (ft_strncmp(tokens[0], "F", 2) == 0 && map->Floor_clr == -1)
+        result = set_color(&map->Floor_clr, tokens[1]);
+    else if (ft_strncmp(tokens[0], "C", 2) == 0 && map->Ceiling_clr == -1)
+        result = set_color(&map->Ceiling_clr, tokens[1]);
+    free_array(&tokens);
+    return (result);
 }
 
 int	is_line_empty(const char *line)
@@ -113,12 +116,12 @@ int	parse_cub_file(char *file, t_map *map)
             count++;
         i++;
     }
-    map->map_grid = (char **)malloc(sizeof(char *) * count + 1);
+    // map->map_grid = (char **)malloc(sizeof(char *) * count + 1);
     if (get_map_info(file_content, &index, map) == -1)
     {
-        return -1;
+        return (free_lines(file_content), -1);
     }
 	close(fd);
-	return (0);
+	return (free_lines(file_content), 0);
 }
 

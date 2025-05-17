@@ -33,6 +33,6 @@ int main(int ac, char **av)
     init_data(&map);
     if (parse_cub_file(av[1], &map) == -1)
         return(1);
-    // free_data(&map);
+    free_data(&map);
     return (EXIT_SUCCESS);
 }
