@@ -28,9 +28,21 @@ int set_color(int *color_field, char *value)
 {
 	char **color;
 	int r, g, b;
+	int count;
+	int i;
 
+	count = 0;
+	i = 0;
 	if(*color_field != -1)
 		return (print_error("Color defined more than once", NULL), -1);
+	while (value[i])
+	{
+		if (value[i] == ',')
+			count++;
+		i++;
+	}
+	if (count != 2)
+		return (print_error("Invalid color format: must contain exactly two commas", NULL), -1);
 	color = ft_split(value, ',');
 	if(validate_rgb_values(color, 2) == -1)
 		return (-1);
