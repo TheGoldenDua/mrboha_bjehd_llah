@@ -6,7 +6,7 @@ void	free_array(char ***arr)
 	int	i;
 
 	if (!arr || !*arr)
-		return;
+		return ;
 	i = 0;
 	while ((*arr)[i])
 	{
@@ -31,7 +31,7 @@ void	free_map_grid(char ***grid)
 	int	i;
 
 	if (!grid || !*grid)
-		return;
+		return ;
 	i = 0;
 	while ((*grid)[i])
 	{
@@ -53,22 +53,27 @@ void	free_data(t_map *map)
 	free_map_grid(&map->map_grid);
 }
 
-void free_textures(t_map *map)
+void	free_textures(t_map *map)
 {
-    if (map->N_wall) free(map->N_wall);
-    if (map->S_wall) free(map->S_wall);
-    if (map->W_wall) free(map->W_wall);
-    if (map->E_wall) free(map->E_wall);
-    map->N_wall = NULL;
-    map->S_wall = NULL;
-    map->W_wall = NULL;
-    map->E_wall = NULL;
+	if (map->N_wall)
+		free(map->N_wall);
+	if (map->S_wall)
+		free(map->S_wall);
+	if (map->W_wall)
+		free(map->W_wall);
+	if (map->E_wall)
+		free(map->E_wall);
+	map->N_wall = NULL;
+	map->S_wall = NULL;
+	map->W_wall = NULL;
+	map->E_wall = NULL;
 }
 
-
-void free_lines(char **lines)
+void	free_lines(char **lines)
 {
-	int i = 0;
+	int	i;
+
+	i = 0;
 	while (lines[i])
 		free(lines[i++]);
 	free(lines);

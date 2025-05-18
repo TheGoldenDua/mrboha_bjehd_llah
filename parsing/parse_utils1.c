@@ -63,8 +63,8 @@ void	*free_split(char **str)
 
 char	**ft_split(char const *s, char c)
 {
-	char	**split;
-	size_t	j;
+	char **split;
+	size_t j;
 
 	if (!s)
 		return (NULL);
