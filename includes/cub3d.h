@@ -40,6 +40,7 @@ int			validate_rgb_values(char **color, int comma_count);
 void		remove_new_line(char *line);
 int			is_valid_identifier(t_map *map, char *token);
 int			check_tex_extension(char *s);
+int	parse_identifiers(char **file_content, t_map *map, int *i);
 
 //Map parsing and validating
 int			is_valid_char(char c);

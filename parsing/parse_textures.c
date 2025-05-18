@@ -75,3 +75,21 @@ int	handle_texture_identifier(t_map *map, char **tokens)
 	}
 	return (-1);
 }
+
+int	parse_identifiers(char **file_content, t_map *map, int *i)
+{
+	int	count;
+
+	count = 0;
+	while (file_content[*i] != NULL && count < 6)
+	{
+		if (!is_line_empty(file_content[*i]))
+		{
+			if (is_valid_identifier(map, file_content[*i]) == -1)
+				return (free_lines(file_content), -1);
+			count++;
+		}
+		(*i)++;
+	}
+	return (0);
+}

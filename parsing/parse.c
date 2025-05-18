@@ -117,40 +117,19 @@ int	parse_cub_file(char *file, t_map *map)
 	int		fd;
 	char	**file_content;
 	int		i;
-	int		count;
-	int		index;
 
 	i = 0;
-	count = 0;
-	index = 0;
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
 		return (print_error("Could not open file", NULL));
 	file_content = read_all_lines(file, fd);
 	if (!file_content || is_line_empty(file_content[0]))
-		return (print_error("Empty file", NULL), free_lines(file_content), -1);
-	while (file_content[i] != NULL && count < 6)
-	{
-		if (!is_line_empty(file_content[i]))
-		{
-			if (is_valid_identifier(map, file_content[i]) == -1)
-				return (free_lines(file_content), -1);
-			count++;
-		}
-		i++;
-	}
-	count = 0;
-	index = i;
-	while (file_content[i] != NULL)
-	{
-		if (!is_line_empty(file_content[i]))
-			count++;
-		i++;
-	}
-	if (get_map_info(file_content, &index, map) == -1)
-	{
+		return (print_error("Empty file", NULL),
+			free_lines(file_content), -1);
+	if (parse_identifiers(file_content, map, &i) == -1)
+		return (-1);
+	if (get_map_info(file_content, &i, map) == -1)
 		return (free_lines(file_content), -1);
-	}
 	close(fd);
 	return (free_lines(file_content), 0);
 }
