@@ -62,6 +62,8 @@ void	free_lines(char **lines)
 	int	i;
 
 	i = 0;
+	if (!lines)
+		return ;
 	while (lines[i])
 		free(lines[i++]);
 	free(lines);

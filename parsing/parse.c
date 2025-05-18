@@ -6,48 +6,87 @@ int	count_lines(int fd)
 	int		count;
 
 	count = 0;
-	while ((line = get_next_line(fd)))
+	line = get_next_line(fd);
+	while (line)
 	{
 		remove_new_line(line);
 		free(line);
 		count++;
+		line = get_next_line(fd);
 	}
 	if (count == 0)
 		return (-1);
 	return (count);
 }
 
-char	**read_all_lines(char *file, int fd)
+static char	**alloc_lines_array(int size)
 {
 	char	**lines;
-	char	*line;
-	int		count;
-	int		size;
 
-	count = 0;
-	size = count_lines(fd);
-	close(fd);
-	if (size <= 0)
-		return (NULL);
 	lines = (char **)malloc(sizeof(char *) * (size + 1));
 	if (!lines)
 		return (NULL);
-	fd = open(file, O_RDONLY);
-	while ((line = get_next_line(fd)))
+	return (lines);
+}
+
+static int	read_lines_into_array(char **lines, int fd, int size)
+{
+	char	*line;
+	int		count;
+
+	count = 0;
+	line = get_next_line(fd);
+	while (line)
 	{
 		if (count >= size)
 		{
 			free(line);
 			break ;
 		}
-		lines[count++] = ft_strdup(line);
-		remove_new_line(lines[count - 1]);
-		if (!lines[count - 1])
-			return (NULL);
+		lines[count] = ft_strdup(line);
+		remove_new_line(lines[count]);
+		if (!lines[count])
+			return (-1);
 		free(line);
+		count++;
+		line = get_next_line(fd);
 	}
 	lines[count] = NULL;
+	return (0);
+}
+
+char	**read_all_lines(char *file, int fd)
+{
+	char	**lines;
+	int		size;
+
+	size = count_lines(fd);
+	close(fd);
+	if (size <= 0)
+		return (NULL);
+	lines = alloc_lines_array(size);
+	if (!lines)
+		return (NULL);
+	fd = open(file, O_RDONLY);
+	if (read_lines_into_array(lines, fd, size) == -1)
+		return (NULL);
 	return (lines);
+}
+
+static int	is_invalid_tokens(char **tokens)
+{
+	if (!tokens || !tokens[0] || !tokens[1])
+	{
+		print_error("File doesn't contain identifiers", NULL);
+		return (1);
+	}
+	if (tokens[2])
+	{
+		print_error(
+			"Identifiers must contain: identifier and the path/color", NULL);
+		return (1);
+	}
+	return (0);
 }
 
 int	is_valid_identifier(t_map *map, char *token)
@@ -57,17 +96,8 @@ int	is_valid_identifier(t_map *map, char *token)
 
 	tokens = ft_split(token, ' ');
 	result = -1;
-	if (!tokens || !tokens[0] || !tokens[1])
-	{
-		print_error("File doesn't contain identifers", NULL);
+	if (is_invalid_tokens(tokens))
 		return (free_array(&tokens), -1);
-	}
-	if (tokens[2])
-	{
-		print_error("Identifiers must contain only the identifier and the path/color",
-					NULL);
-		return (free_array(&tokens), -1);
-	}
 	if (!ft_strncmp(tokens[0], "NO", 3) || !ft_strncmp(tokens[0], "SO", 3)
 		|| !ft_strncmp(tokens[0], "WE", 3) || !ft_strncmp(tokens[0], "EA", 3))
 		result = handle_texture_identifier(map, tokens);

@@ -14,23 +14,16 @@ int	get_map_height(char **lines, int start)
 	return (height);
 }
 
-int	copy_real_map_lines(char **map_lines, int *index, t_map *map)
+static int	fill_map_grid(char **map_lines, int *index, t_map *map, int len)
 {
-	int	len;
-	int	height;
-	int	j;
 	int	i;
+	int	j;
 
-	len = get_max_width(map_lines);
-	height = get_map_height(map_lines, *index);
-	j = 0;
 	i = *index;
-	map->map_grid = malloc(sizeof(char *) * (height + 1));
-	if (!map->map_grid)
-		return (print_error("Memory allocation failed", NULL));
+	j = 0;
 	while (map_lines[i])
 	{
-		if (!is_line_empty(map_lines[i]))
+		if(!is_line_empty(map_lines[i]))
 		{
 			map->map_grid[j] = fill_line_spaces(map_lines[i], len);
 			if (!map->map_grid[j])
@@ -40,8 +33,23 @@ int	copy_real_map_lines(char **map_lines, int *index, t_map *map)
 		i++;
 	}
 	map->map_grid[j] = NULL;
-	map->map_height = height;
 	*index = i;
+	return (0);
+}
+
+int	copy_real_map_lines(char **map_lines, int *index, t_map *map)
+{
+	int	len;
+	int	height;
+
+	len = get_max_width(map_lines);
+	height = get_map_height(map_lines, *index);
+	map->map_grid = malloc(sizeof(char *) * (height + 1));
+	if (!map->map_grid)
+		return (print_error("Memory allocation failed", NULL));
+	if (fill_map_grid(map_lines, index, map, len) == -1)
+		return (-1);
+	map->map_height = height;
 	return (0);
 }
 

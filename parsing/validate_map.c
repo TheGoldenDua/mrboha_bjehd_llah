@@ -24,31 +24,40 @@ int	has_valid_border(char **map)
 	return (0);
 }
 
-int	player_count_and_pos(char **map, t_map *data)
+static int	scan_map_line(char *line, int y, int *count, t_map *data)
 {
+	int		x;
 	char	c;
 
-	int x, y, count;
-	c = 0;
+	x = 0;
+	while (line[x])
+	{
+		c = line[x];
+		if (!is_valid_char(c))
+			return (print_error("Invalid character in map", data));
+		if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
+		{
+			data->player_x = x;
+			data->player_y = y;
+			data->player_dir = c;
+			(*count)++;
+		}
+		x++;
+	}
+	return (0);
+}
+
+int	player_count_and_pos(char **map, t_map *data)
+{
+	int	y;
+	int	count;
+
 	y = 0;
 	count = 0;
 	while (map[y])
 	{
-		x = 0;
-		while (map[y][x] != '\0')
-		{
-			c = map[y][x];
-			if (!is_valid_char(c))
-				return (print_error("Invalid character in map", data));
-			if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
-			{
-				data->player_x = x;
-				data->player_y = y;
-				data->player_dir = c;
-				count++;
-			}
-			x++;
-		}
+		if (scan_map_line(map[y], y, &count, data) == -1)
+			return (-1);
 		y++;
 	}
 	if (count == 0)
@@ -57,6 +66,8 @@ int	player_count_and_pos(char **map, t_map *data)
 		return (print_error("Map has more than one player", data));
 	return (0);
 }
+
+
 
 int	validate_map(t_map *map)
 {
