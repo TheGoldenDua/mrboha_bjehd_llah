@@ -6,6 +6,17 @@ int	is_valid_char(char c)
 		|| c == 'W');
 }
 
+void	free_data(t_map *map)
+{
+	if (!map)
+		return ;
+	free_wall(&map->n_wall);
+	free_wall(&map->s_wall);
+	free_wall(&map->w_wall);
+	free_wall(&map->e_wall);
+	free_map_grid(&map->map_grid);
+}
+
 int	get_max_width(char **map)
 {
 	int	i;

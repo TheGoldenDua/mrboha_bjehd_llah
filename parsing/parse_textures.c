@@ -51,27 +51,27 @@ int	handle_texture_identifier(t_map *map, char **tokens)
 {
 	if (!ft_strncmp(tokens[0], "NO", 3))
 	{
-		if (map->N_wall)
+		if (map->n_wall)
 			return (print_error("Texture NO defined more than once", NULL));
-		return (set_tex_path(&map->N_wall, tokens[1]));
+		return (set_tex_path(&map->n_wall, tokens[1]));
 	}
 	if (!ft_strncmp(tokens[0], "SO", 3))
 	{
-		if (map->S_wall)
+		if (map->s_wall)
 			return (print_error("Texture SO defined more than once", NULL));
-		return (set_tex_path(&map->S_wall, tokens[1]));
+		return (set_tex_path(&map->s_wall, tokens[1]));
 	}
 	if (!ft_strncmp(tokens[0], "WE", 3))
 	{
-		if (map->W_wall)
+		if (map->w_wall)
 			return (print_error("Texture WE defined more than once", NULL));
-		return (set_tex_path(&map->W_wall, tokens[1]));
+		return (set_tex_path(&map->w_wall, tokens[1]));
 	}
 	if (!ft_strncmp(tokens[0], "EA", 3))
 	{
-		if (map->E_wall)
+		if (map->e_wall)
 			return (print_error("Texture EA defined more than once", NULL));
-		return (set_tex_path(&map->E_wall, tokens[1]));
+		return (set_tex_path(&map->e_wall, tokens[1]));
 	}
 	return (-1);
 }

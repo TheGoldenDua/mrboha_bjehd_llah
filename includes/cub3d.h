@@ -1,21 +1,19 @@
-
 #ifndef CUB3D_H
 # define CUB3D_H
 
 # include "../get_next_line/get_next_line.h"
 # include <fcntl.h>
 # include <stdio.h>
-# include <stdio.h>
 # include <stdlib.h>
 
 typedef struct s_map
 {
-	char	*N_wall;
-	char	*S_wall;
-	char	*W_wall;
-	char	*E_wall;
-	int		Floor_clr;
-	int		Ceiling_clr;
+	char	*n_wall;
+	char	*s_wall;
+	char	*w_wall;
+	char	*e_wall;
+	int		floor_clr;
+	int		ceiling_clr;
 	char	**map_grid;
 	int		player_x;
 	int		player_y;

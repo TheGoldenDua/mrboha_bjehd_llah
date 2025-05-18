@@ -37,12 +37,13 @@ int	check_side_walls(char *row)
 	return (0);
 }
 
-int	check_space_surroundings(t_map *map)
+int	check_space_surroundings(t_map *map) //more than 25 lines
 {
-	int	y;
-	int	msize;
+	int y;
+	int x;
+	int msize;
+	int width;
 
-	int x, width;
 	msize = map->map_height;
 	y = 1;
 	while (y < msize - 1)

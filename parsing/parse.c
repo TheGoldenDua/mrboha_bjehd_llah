@@ -65,7 +65,7 @@ int	is_valid_identifier(t_map *map, char *token)
 	if (tokens[2])
 	{
 		print_error("Identifiers must contain only the identifier and the path/color",
-				NULL);
+					NULL);
 		return (free_array(&tokens), -1);
 	}
 	if (!ft_strncmp(tokens[0], "NO", 3) || !ft_strncmp(tokens[0], "SO", 3)

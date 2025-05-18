@@ -2,12 +2,12 @@
 
 void	init_data(t_map *map)
 {
-	map->N_wall = NULL;
-	map->S_wall = NULL;
-	map->W_wall = NULL;
-	map->E_wall = NULL;
-	map->Ceiling_clr = -1;
-	map->Floor_clr = -1;
+	map->n_wall = NULL;
+	map->s_wall = NULL;
+	map->w_wall = NULL;
+	map->e_wall = NULL;
+	map->ceiling_clr = -1;
+	map->floor_clr = -1;
 	map->map_grid = NULL;
 	map->map_height = -1;
 }
@@ -27,10 +27,10 @@ int	main(int ac, char **av)
 	t_map	map;
 
 	if (ac != 2)
-		return (printf("Error\n Incorrect Parameters!\n Usage: ./cub3d <map_file.cub>\n"),
+		return (print_error("Incorrect Parameters!\n Usage: ./cub3d <map_file.cub>", NULL),
 			1);
 	if (check_extension(av[1]) == -1)
-		return (printf("Error\n Invalid File Extension\n Correct Extention: <file.cub> \n"),
+		return (print_error("Invalid File Extension\n Correct Extention: <file.cub>", NULL),
 			1);
 	init_data(&map);
 	if (parse_cub_file(av[1], &map) == -1)
