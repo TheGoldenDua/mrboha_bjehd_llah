@@ -37,11 +37,39 @@ static int	fill_map_grid(char **map_lines, int *index, t_map *map, int len)
 	return (0);
 }
 
+int	has_internal_empty_line(char **lines, int start)
+{
+	int	i;
+	int	started;
+
+	i = start;
+	started = 0;
+	while (lines[i])
+	{
+		if (!is_line_empty(lines[i]))
+			started = 1;
+		else if (started)
+		{
+			while (lines[i])
+			{
+				if (!is_line_empty(lines[i]))
+					return (print_error("Empty line inside map", NULL));
+				i++;
+			}
+			break;
+		}
+		i++;
+	}
+	return (0);
+}
+
 int	copy_real_map_lines(char **map_lines, int *index, t_map *map)
 {
 	int	len;
 	int	height;
 
+	if (has_internal_empty_line(map_lines, *index))
+		return (-1);
 	len = get_max_width(map_lines);
 	height = get_map_height(map_lines, *index);
 	map->map_grid = malloc(sizeof(char *) * (height + 1));

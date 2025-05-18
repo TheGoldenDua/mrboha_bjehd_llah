@@ -67,8 +67,6 @@ int	player_count_and_pos(char **map, t_map *data)
 	return (0);
 }
 
-
-
 int	validate_map(t_map *map)
 {
 	if (!map->map_grid)

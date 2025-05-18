@@ -56,6 +56,7 @@ int			is_map_line(char *line);
 int			has_valid_border(char **map);
 int			player_count_and_pos(char **map, t_map *data);
 int			validate_map(t_map *map);
+int	has_empty_lines_inside(char **map);
 
 //parse functions
 int			count_lines(int fd);
