@@ -1,5 +1,24 @@
 #include "../includes/cub3d.h"
 
+int	count_lines(int fd)
+{
+	char	*line;
+	int		count;
+
+	count = 0;
+	line = get_next_line(fd);
+	while (line)
+	{
+		remove_new_line(line);
+		free(line);
+		count++;
+		line = get_next_line(fd);
+	}
+	if (count == 0)
+		return (-1);
+	return (count);
+}
+
 int	is_valid_char(char c)
 {
 	return (c == '0' || c == '1' || c == ' ' || c == 'N' || c == 'S' || c == 'E'

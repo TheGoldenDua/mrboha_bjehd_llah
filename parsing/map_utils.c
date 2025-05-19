@@ -1,5 +1,31 @@
 #include "../includes/cub3d.h"
 
+int	read_lines_into_array(char **lines, int fd, int size)
+{
+	char	*line;
+	int		count;
+
+	count = 0;
+	line = get_next_line(fd);
+	while (line)
+	{
+		if (count >= size)
+		{
+			free(line);
+			break ;
+		}
+		lines[count] = ft_strdup(line);
+		remove_new_line(lines[count]);
+		if (!lines[count])
+			return (-1);
+		free(line);
+		count++;
+		line = get_next_line(fd);
+	}
+	lines[count] = NULL;
+	return (0);
+}
+
 int	check_row_walls(char *row)
 {
 	int	i;

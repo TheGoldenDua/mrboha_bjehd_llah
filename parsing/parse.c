@@ -1,25 +1,6 @@
 #include "../includes/cub3d.h"
 
-int	count_lines(int fd)
-{
-	char	*line;
-	int		count;
-
-	count = 0;
-	line = get_next_line(fd);
-	while (line)
-	{
-		remove_new_line(line);
-		free(line);
-		count++;
-		line = get_next_line(fd);
-	}
-	if (count == 0)
-		return (-1);
-	return (count);
-}
-
-static char	**alloc_lines_array(int size)
+char	**alloc_lines_array(int size)
 {
 	char	**lines;
 
@@ -27,32 +8,6 @@ static char	**alloc_lines_array(int size)
 	if (!lines)
 		return (NULL);
 	return (lines);
-}
-
-static int	read_lines_into_array(char **lines, int fd, int size)
-{
-	char	*line;
-	int		count;
-
-	count = 0;
-	line = get_next_line(fd);
-	while (line)
-	{
-		if (count >= size)
-		{
-			free(line);
-			break ;
-		}
-		lines[count] = ft_strdup(line);
-		remove_new_line(lines[count]);
-		if (!lines[count])
-			return (-1);
-		free(line);
-		count++;
-		line = get_next_line(fd);
-	}
-	lines[count] = NULL;
-	return (0);
 }
 
 char	**read_all_lines(char *file, int fd)
@@ -73,7 +28,7 @@ char	**read_all_lines(char *file, int fd)
 	return (lines);
 }
 
-static int	is_invalid_tokens(char **tokens)
+int	is_invalid_tokens(char **tokens)
 {
 	if (!tokens || !tokens[0] || !tokens[1])
 	{
