@@ -53,7 +53,7 @@ int	has_internal_empty_line(char **lines, int start)
 			while (lines[i])
 			{
 				if (!is_line_empty(lines[i]))
-					return (print_error("Empty line inside map", NULL));
+					return (print_error("Invalid map", NULL));
 				i++;
 			}
 			break ;

@@ -79,7 +79,7 @@ int	parse_cub_file(char *file, t_map *map)
 		return (print_error("Could not open file", NULL));
 	file_content = read_all_lines(file, fd);
 	if (!file_content || is_line_empty(file_content[0]))
-		return (print_error("Empty file", NULL),
+		return (print_error("Invalid file", NULL),
 			free_lines(file_content), -1);
 	if (parse_identifiers(file_content, map, &i) == -1)
 		return (-1);
