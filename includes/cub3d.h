@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cub3d.h                                            :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: del-ganb <del-ganb@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/19 12:32:05 by del-ganb          #+#    #+#             */
+/*   Updated: 2025/05/19 12:32:06 by del-ganb         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef CUB3D_H
 # define CUB3D_H
 
@@ -19,6 +31,7 @@ typedef struct s_map
 	int		player_y;
 	char	player_dir;
 	int		map_height;
+	int		map_width;
 }			t_map;
 
 //memory management and error handling

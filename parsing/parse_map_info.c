@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   parse_map_info.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: del-ganb <del-ganb@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2025/05/19 12:32:34 by del-ganb          #+#    #+#             */
+/*   Updated: 2025/05/19 12:32:35 by del-ganb         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "../includes/cub3d.h"
 
 int	get_map_height(char **lines, int start)
@@ -71,6 +83,7 @@ int	copy_real_map_lines(char **map_lines, int *index, t_map *map)
 	if (has_internal_empty_line(map_lines, *index))
 		return (-1);
 	len = get_max_width(map_lines);
+	map->map_width = len;
 	height = get_map_height(map_lines, *index);
 	map->map_grid = malloc(sizeof(char *) * (height + 1));
 	if (!map->map_grid)
