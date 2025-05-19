@@ -27,11 +27,17 @@ int	main(int ac, char **av)
 	t_map	map;
 
 	if (ac != 2)
-		return (print_error("Incorrect Parameters!\n Usage: ./cub3d <map_file.cub>", NULL),
-			1);
+	{
+		print_error("Incorrect Parameters!\n Usage: ./cub3d <map_file.cub>",
+			NULL);
+		return (1);
+	}
 	if (check_extension(av[1]) == -1)
-		return (print_error("Invalid File Extension\n Correct Extention: <file.cub>", NULL),
-			1);
+	{
+		print_error("Invalid File Extension\n Correct Extention: <file.cub>",
+			NULL);
+		return (1);
+	}
 	init_data(&map);
 	if (parse_cub_file(av[1], &map) == -1)
 		return (free_data(&map), 1);

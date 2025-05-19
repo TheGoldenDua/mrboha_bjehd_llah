@@ -62,7 +62,7 @@ int	check_space_surroundings(t_map *map)
 		width = ft_strlen(map->map_grid[y]);
 		while (x < width - 1)
 		{
-			if (map->map_grid[y][x] == '0' 
+			if (map->map_grid[y][x] == '0'
 				&& is_invalid_surrounding(map, x, y))
 				return (print_error("Invalid space near open area", NULL));
 			x++;

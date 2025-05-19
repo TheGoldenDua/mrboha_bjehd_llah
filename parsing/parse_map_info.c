@@ -23,7 +23,7 @@ static int	fill_map_grid(char **map_lines, int *index, t_map *map, int len)
 	j = 0;
 	while (map_lines[i])
 	{
-		if(!is_line_empty(map_lines[i]))
+		if (!is_line_empty(map_lines[i]))
 		{
 			map->map_grid[j] = fill_line_spaces(map_lines[i], len);
 			if (!map->map_grid[j])
@@ -56,7 +56,7 @@ int	has_internal_empty_line(char **lines, int start)
 					return (print_error("Empty line inside map", NULL));
 				i++;
 			}
-			break;
+			break ;
 		}
 		i++;
 	}

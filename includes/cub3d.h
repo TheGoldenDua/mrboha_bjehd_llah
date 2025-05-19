@@ -40,7 +40,7 @@ int			validate_rgb_values(char **color, int comma_count);
 void		remove_new_line(char *line);
 int			is_valid_identifier(t_map *map, char *token);
 int			check_tex_extension(char *s);
-int	parse_identifiers(char **file_content, t_map *map, int *i);
+int			parse_identifiers(char **file_content, t_map *map, int *i);
 
 //Map parsing and validating
 int			is_valid_char(char c);
@@ -57,7 +57,7 @@ int			is_map_line(char *line);
 int			has_valid_border(char **map);
 int			player_count_and_pos(char **map, t_map *data);
 int			validate_map(t_map *map);
-int	has_empty_lines_inside(char **map);
+int			has_empty_lines_inside(char **map);
 
 //parse functions
 int			count_lines(int fd);
