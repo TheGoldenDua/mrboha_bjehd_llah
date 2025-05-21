@@ -29,6 +29,7 @@ void	cleanup(t_game *g)
 		mlx_destroy_display(g->mlx);
 		free(g->mlx);
 	}
+	free_data(g->map_info);
 }
 
 
@@ -405,7 +406,7 @@ void	handle_rotation(int key, t_game *g)
 }
 
 /* ---- Section 7: Hooks ---- */
-int	handle_key(int key, t_game *g)
+int		handle_key(int key, t_game *g)
 {
 	if (key == ESC_KEY)
 	{

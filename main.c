@@ -6,7 +6,7 @@
 /*   By: aourhou <aourhou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 12:33:12 by del-ganb          #+#    #+#             */
-/*   Updated: 2025/05/21 15:20:40 by aourhou          ###   ########.fr       */
+/*   Updated: 2025/05/21 16:12:54 by aourhou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,7 +155,7 @@ int	main(int ac, char **av)
 		big_bang(g);
 		// free_mlx_resources(&g);
 	}
-	free_textures(&map);
+	// free_textures(&map);
 	free_data(&map);
 	cleanup(&g);
 	return (0);
