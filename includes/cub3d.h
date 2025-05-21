@@ -3,20 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: del-ganb <del-ganb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aourhou <aourhou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 12:32:05 by del-ganb          #+#    #+#             */
-/*   Updated: 2025/05/19 12:32:06 by del-ganb         ###   ########.fr       */
+/*   Updated: 2025/05/21 10:54:33 by aourhou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
+# include <math.h>
 # include "../get_next_line/get_next_line.h"
 # include <fcntl.h>
 # include <stdio.h>
 # include <stdlib.h>
+
+
 
 typedef struct s_map
 {
@@ -33,6 +36,71 @@ typedef struct s_map
 	int		map_height;
 	int		map_width;
 }			t_map;
+
+#include <math.h>
+#include <mlx.h>
+#include <stdlib.h>
+#include <unistd.h>
+
+#define WIDTH 2048
+#define HEIGHT 1080
+#define MOVE_SPEED 0.5
+#define ROT_SPEED 0.05
+#define MAP_WIDTH 16
+#define MAP_HEIGHT 5
+#define NUM_TEXTURES 4
+#define TEX_HEIGHT 32
+#define TEX_WIDTH 32
+#define ESC_KEY 65307
+#define FORWARD_KEY 65362
+#define BACKWARD_KEY 65364
+#define LEFT_KEY 65361
+#define RIGHT_KEY 65363
+#define LEFT_ARROW_KEY 97
+#define RIGHT_ARROW_KEY 100
+
+typedef struct s_game
+{
+	void	*mlx;
+	void	*win;
+	int		bpp;
+	int		size_line;
+	int		endian;
+	void	*img;
+	char	*img_data;
+	double	posX;
+	double	posY;
+	double	dirX;
+	double	dirY;
+	double	planeX;
+	double	planeY;
+	int		textures[NUM_TEXTURES][TEX_WIDTH * TEX_HEIGHT];
+	void	*tex_img[NUM_TEXTURES];
+	char	*tex_data[NUM_TEXTURES];
+	int		tex_bpp[NUM_TEXTURES];
+	int		tex_size_line[NUM_TEXTURES];
+	int		tex_endian[NUM_TEXTURES];
+	t_map	*map_info;
+	int		**world_map;
+}			t_game;
+
+typedef struct s_ray
+{
+	double cameraX, rayDirX, rayDirY;
+	int mapX, mapY, stepX, stepY, side, hit;
+	double deltaDistX, deltaDistY, sideDistX, sideDistY;
+	double perpWallDist, wallX;
+	int lineHeight, drawStart, drawEnd, texX;
+}			t_ray;
+
+int convert_char_map_to_int(t_game *g);
+void free_int_map(int **int_map, int height);
+int	big_bang(t_game g);
+void mix_textures(t_game *g, t_map map);
+int	handle_key(int key, t_game *g);
+int	handle_exit(t_game *g);
+void	render_frame(t_game *g);
+void	cleanup(t_game *g);
 
 //memory management and error handling
 void		free_array(char ***arr);
@@ -96,5 +164,8 @@ void		*free_split(char **str);
 char		**ft_split(char const *s, char c);
 void		*ft_memcpy(void *dest, const void *src, size_t n);
 void		*ft_memset(void *s, int c, size_t n);
+
+
+
 
 #endif

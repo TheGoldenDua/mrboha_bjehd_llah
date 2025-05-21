@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: del-ganb <del-ganb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aourhou <aourhou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 12:33:05 by del-ganb          #+#    #+#             */
-/*   Updated: 2025/05/19 12:33:06 by del-ganb         ###   ########.fr       */
+/*   Updated: 2025/05/21 14:16:26 by aourhou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,7 +96,11 @@ int	parse_cub_file(char *file, t_map *map)
 	if (parse_identifiers(file_content, map, &i) == -1)
 		return (-1);
 	if (get_map_info(file_content, &i, map) == -1)
-		return (free_lines(file_content), -1);
+	{
+		free_lines(file_content);
+		free_textures(map);
+		return (-1);
+	}
 	close(fd);
 	return (free_lines(file_content), 0);
 }

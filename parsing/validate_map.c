@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   validate_map.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: del-ganb <del-ganb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aourhou <aourhou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 12:33:09 by del-ganb          #+#    #+#             */
-/*   Updated: 2025/05/19 12:33:10 by del-ganb         ###   ########.fr       */
+/*   Updated: 2025/05/20 16:41:40 by aourhou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static int	scan_map_line(char *line, int y, int *count, t_map *data)
 	{
 		c = line[x];
 		if (!is_valid_char(c))
-			return (print_error("Invalid character in map", data));
+			return (print_error("Invalid character in map", data), -1);
 		if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
 		{
 			data->player_x = x;
@@ -84,10 +84,10 @@ int	validate_map(t_map *map)
 	if (!map->map_grid)
 		return (print_error("Map block not found after identifiers", map));
 	if (has_valid_border(map->map_grid))
-		return (1);
+		return (-1);
 	if (player_count_and_pos(map->map_grid, map))
-		return (1);
+		return (-1);
 	if (check_space_surroundings(map))
-		return (1);
+		return (-1);
 	return (0);
 }

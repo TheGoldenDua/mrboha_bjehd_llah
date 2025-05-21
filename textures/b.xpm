@@ -1,0 +1,42 @@
+/* XPM */
+static char *islamic_star[] = {
+/* width height num_colors chars_per_pixel */
+"32 32 3 1",
+/* colors */
+". c #8B0000", /* dark red background */
+"G c #FFD700", /* gold color for the star */
+"  c #8B0000", /* same as background for simplicity */
+/* pixels */
+"................................",
+"................................",
+"................................",
+"............GGGG................",
+"...........GGGGGG...............",
+"..........GGGGGGGG..............",
+".........GGGGGGGGGG.............",
+".......GGGG......GGGG...........",
+"......GGGG........GGGG..........",
+".....GGGG..........GGGG.........",
+"....GGGG............GGGG........",
+"...GGGG..............GGGG.......",
+"..GGGG................GGGG......",
+".GGGG..................GGGG.....",
+"GGGGGGGGGGGGGGGGGGGGGGGGGGGG....",
+"GGGGGGGGGGGGGGGGGGGGGGGGGGGG....",
+"GGGGGGGGGGGGGGGGGGGGGGGGGGGG....",
+"GGGGGGGGGGGGGGGGGGGGGGGGGGGG....",
+".GGGG..................GGGG.....",
+"..GGGG................GGGG......",
+"...GGGG..............GGGG.......",
+"....GGGG............GGGG........",
+".....GGGG..........GGGG.........",
+"......GGGG........GGGG..........",
+".......GGGG......GGGG...........",
+".........GGGGGGGGGG.............",
+"..........GGGGGGGG..............",
+"...........GGGGGG...............",
+"............GGGG................",
+"................................",
+"................................",
+"................................"
+};

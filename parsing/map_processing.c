@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   map_processing.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: del-ganb <del-ganb@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aourhou <aourhou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 12:32:19 by del-ganb          #+#    #+#             */
-/*   Updated: 2025/05/19 12:33:34 by del-ganb         ###   ########.fr       */
+/*   Updated: 2025/05/20 13:13:40 by aourhou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,7 +60,7 @@ int	get_max_width(char **map)
 	while (map[i])
 	{
 		current_len = ft_strlen(map[i]);
-		if (current_len >= max_len)
+		if (current_len > max_len)
 			max_len = current_len;
 		i++;
 	}
