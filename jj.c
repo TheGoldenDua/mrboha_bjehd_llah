@@ -1,16 +1,5 @@
 #include "./includes/cub3d.h"
 
-
-// char		*map[] = {
-// 	"1111111111111111",
-// 	"1000000000000001",
-// 	"1000000100000001",
-// 	"10000000P0000001",
-// 	"1111111111111111",
-// 	NULL};
-// int			world_map[MAP_HEIGHT][MAP_WIDTH];
-
-/* ---- Section 1: Utils, Map, FOV ---- */
 void	cleanup(t_game *g)
 {
 	if (g->world_map)
@@ -18,39 +7,21 @@ void	cleanup(t_game *g)
 		free_int_map(g->world_map, g->map_info->map_height);
 		g->world_map = NULL;
 	}
-    if (g->img)
-        mlx_destroy_image(g->mlx, g->img);
-    if (g->win)
-    {
+	if (g->img)
+	{
+		mlx_destroy_image(g->mlx, g->img);
+	}
+	if (g->win)
+	{
 		mlx_destroy_window(g->mlx, g->win);
 	}
-	if(g->mlx)
-	{	
+	if (g->mlx)
+	{
 		mlx_destroy_display(g->mlx);
 		free(g->mlx);
 	}
 	free_data(g->map_info);
 }
-
-
-// void	fill_world_map(t_game *g)
-// {
-// 	int x, y;
-// 	y = 0;
-// 	while (y < MAP_HEIGHT)
-// 	{
-// 		x = 0;
-// 		while (g->map_info->map_grid[y] && x < MAP_WIDTH)
-// 		{
-// 			if (g->map_info->map_grid[y][x] >= '1' && g->map_info->map_grid[y][x] <= '9')
-// 				world_map[y][x] = g->map_info->map_grid[y][x] - '0';
-// 			else
-// 				world_map[y][x] = 0;
-// 			x++;
-// 		}
-// 		y++;
-// 	}
-// }
 
 void	set_fov_assist(t_game *g, char c)
 {
@@ -94,17 +65,17 @@ void	find_player_pos(t_game *g)
 {
 	g->posX = g->map_info->player_x;
 	g->posY = g->map_info->player_y;
-
 }
-
 /* ---- Section 2: Texture Loading ---- */
+
 int	load_texture_img(t_game *g, int idx, char *filename)
 {
-	int width;
-	int height;
-	int x;
-	int y;
-	int *tmp;
+	int	width;
+	int	height;
+	int	x;
+	int	y;
+	int	*tmp;
+
 	g->tex_img[idx] = mlx_xpm_file_to_image(g->mlx, filename, &width, &height);
 	if (!g->tex_img[idx])
 		return (0);
@@ -123,20 +94,18 @@ int	load_texture_img(t_game *g, int idx, char *filename)
 		}
 		y++;
 	}
-	mlx_destroy_image(g->mlx, g->tex_img[idx]);
-	return (1);
+	return (mlx_destroy_image(g->mlx, g->tex_img[idx]), 1);
 }
 
 int	load_textures(t_game *g)
 {
-	int	i;
+	int		i;
+	char	*files[NUM_TEXTURES];
 
-	char *files[NUM_TEXTURES] = {
-		g->map_info->n_wall,
-		g->map_info->e_wall,
-		g->map_info->w_wall,
-		g->map_info->s_wall
-		};
+	files[0] = g->map_info->n_wall;
+	files[1] = g->map_info->e_wall;
+	files[2] = g->map_info->w_wall;
+	files[3] = g->map_info->s_wall;
 	i = 0;
 	while (i < NUM_TEXTURES)
 	{
@@ -163,7 +132,9 @@ void	put_pixel_to_image(t_game *g, int x, int y, int color)
 
 void	clear_image(t_game *g)
 {
-	int x, y;
+	int	x;
+	int	y;
+
 	y = 0;
 	while (y < HEIGHT)
 	{
@@ -197,8 +168,14 @@ void	init_ray_vars(t_game *g, int x, t_ray *r)
 	r->rayDirY = g->dirY + g->planeY * r->cameraX;
 	r->mapX = (int)g->posX;
 	r->mapY = (int)g->posY;
-	r->deltaDistX = (r->rayDirX == 0) ? 1e30 : fabs(1 / r->rayDirX);
-	r->deltaDistY = (r->rayDirY == 0) ? 1e30 : fabs(1 / r->rayDirY);
+	if (r->rayDirX == 0)
+		r->deltaDistX = 1e30;
+	else
+		r->deltaDistX = fabs(1 / r->rayDirX);
+	if (r->rayDirY == 0)
+		r->deltaDistY = 1e30;
+	else
+		r->deltaDistY = fabs(1 / r->rayDirY);
 }
 
 void	init_dda(t_game *g, t_ray *r)
@@ -242,9 +219,9 @@ void	perform_dda(t_game *g, t_ray *r)
 			r->mapY += r->stepY;
 			r->side = 1;
 		}
-		if (r->mapX < 0 || r->mapX >= g->map_info->map_width ||
-			r->mapY < 0 || r->mapY >= g->map_info->map_height
-				|| g->world_map[r->mapY][r->mapX] > 0)
+		if (r->mapX < 0 || r->mapX >= g->map_info->map_width
+			|| r->mapY < 0 || r->mapY >= g->map_info->map_height
+			|| g->world_map[r->mapY][r->mapX] > 0)
 			r->hit = 1;
 	}
 }
@@ -262,11 +239,9 @@ void	calc_perp_wall_dist(t_ray *r, t_game *g)
 void	calc_draw_limits(t_ray *r)
 {
 	double	aspectRatio;
-	
+
 	aspectRatio = (double)WIDTH / HEIGHT;
 	r->lineHeight = (int)((HEIGHT * 0.8) / r->perpWallDist * aspectRatio);
-	// if(r->lineHeight < 0 || r->lineHeight > HEIGHT)
-	// 	r->lineHeight = HEIGHT;
 	r->drawStart = -r->lineHeight / 2 + HEIGHT / 2;
 	if (r->drawStart < 0)
 		r->drawStart = 0;
@@ -287,15 +262,35 @@ void	calc_wall_and_tex(t_ray *r, t_game *g)
 	if ((r->side == 0 && r->rayDirX > 0) || (r->side == 1 && r->rayDirY < 0))
 		r->texX = TEX_WIDTH - r->texX - 1;
 }
+int	calc_step_x(int x)
+{
+	if (x > 0)
+		return (3);
+	else
+		return (2);
+}
+
+int	calc_step_y(int y)
+{
+	if (y > 0)
+		return (1);
+	else
+		return (0);
+}
 
 void	draw_wall_and_floor(t_game *g, int x, t_ray *r)
 {
-	int texNum, y, texY, color;
-	double step, texPos;
+	int		texNum;
+	int		y;
+	int		texY;
+	int		color;
+	double	step;
+	double	texPos;
+
 	if (r->side == 0)
-		texNum = (r->stepX > 0) ? 3 : 2;
+		texNum = calc_step_x(r->side);
 	else
-		texNum = (r->stepY > 0) ? 1 : 0;
+		texNum = calc_step_y(r->stepY);
 	step = 1.0 * TEX_HEIGHT / r->lineHeight;
 	texPos = (r->drawStart - HEIGHT / 2 + r->lineHeight / 2) * step;
 	y = r->drawStart;
@@ -358,18 +353,34 @@ void	get_move_vector(int key, t_game *g, double *moveX, double *moveY)
 	*moveX = 0;
 	*moveY = 0;
 	if (key == FORWARD_KEY)
-		*moveX = g->dirX, *moveY = g->dirY;
+	{
+		*moveX = g->dirX;
+		*moveY = g->dirY;
+	}
 	else if (key == BACKWARD_KEY)
-		*moveX = -g->dirX, *moveY = -g->dirY;
+	{
+		*moveX = -g->dirX;
+		*moveY = -g->dirY;
+	}
 	else if (key == LEFT_KEY)
-		*moveX = -g->planeX, *moveY = -g->planeY;
+	{
+		*moveX = -g->planeX;
+		*moveY = -g->planeY;
+	}
 	else if (key == RIGHT_KEY)
-		*moveX = g->planeX, *moveY = g->planeY;
+	{
+		*moveX = g->planeX;
+		*moveY = g->planeY;
+	}
 }
 
 void	handle_movement(int key, t_game *g)
 {
-	double moveX, moveY, newPosX, newPosY;
+	double	moveX;
+	double	moveY;
+	double	newPosX;
+	double	newPosY;
+
 	get_move_vector(key, g, &moveX, &moveY);
 	if (moveX || moveY)
 	{
@@ -384,7 +395,9 @@ void	handle_movement(int key, t_game *g)
 
 void	handle_rotation(int key, t_game *g)
 {
-	double oldDirX, oldPlaneX;
+	double	oldDirX;
+	double	oldPlaneX;
+
 	if (key == LEFT_ARROW_KEY)
 	{
 		oldDirX = g->dirX;
@@ -406,7 +419,7 @@ void	handle_rotation(int key, t_game *g)
 }
 
 /* ---- Section 7: Hooks ---- */
-int		handle_key(int key, t_game *g)
+int	handle_key(int key, t_game *g)
 {
 	if (key == ESC_KEY)
 	{
@@ -426,60 +439,62 @@ int	handle_exit(t_game *g)
 	return (0);
 }
 
-int convert_char_map_to_int(t_game *g)
+void	purge(t_game *g, int y)
 {
-	int y;
+	int	k;
+
+	k = 0;
+	while (k < y)
+	{
+		free(g->world_map[k]);
+		k++;
+	}
+}
+
+int	convert_char_map_to_int(t_game *g)
+{
+	int	y;
 	int	x;
-	int k;
 
 	y = 0;
-    g->world_map = malloc(g->map_info->map_height * sizeof(int *));
-    if (!g->world_map)
-        return (1);
-
-    while (y < g->map_info->map_height)
-    {
-        g->world_map[y] = malloc(g->map_info->map_width * sizeof(int));
-        if (!g->world_map[y])
-        {
-            k = 0;
-            while (k < y)
-			{
-            	free(g->world_map[k]);
-				k++;
-			}
-			free(g->world_map);
-            return (1);
-        }
+	g->world_map = malloc(g->map_info->map_height * sizeof(int *));
+	if (!g->world_map)
+		return (1);
+	while (y < g->map_info->map_height)
+	{
+		g->world_map[y] = malloc(g->map_info->map_width * sizeof(int));
+		if (!g->world_map[y])
+			return (purge(g, y), free(g->world_map), 1);
 		x = 0;
-        while (x < g->map_info->map_width)
-        {
+		while (x < g->map_info->map_width)
+		{
 			if (g->map_info->map_grid[y][x] == '1')
 				g->world_map[y][x] = 1;
-            else
-                g->world_map[y][x] = 0;
+			else
+				g->world_map[y][x] = 0;
 			x++;
-        }
+		}
 		y++;
-    }
-    return (0);
+	}
+	return (0);
 }
-void free_int_map(int **int_map, int height)
+
+void	free_int_map(int **int_map, int height)
 {
-	int y;
+	int	y;
 
 	y = 0;
-    while (y < height)
+	while (y < height)
 	{
-        free(int_map[y]);
+		free(int_map[y]);
 		y++;
 	}
 	free(int_map);
 }
 /* ---- Section 8: main ---- */
+
 int	big_bang(t_game g)
 {
-
 	g.mlx = mlx_init();
 	if (!g.mlx)
 		return (cleanup(&g), 1);
@@ -492,22 +507,12 @@ int	big_bang(t_game g)
 		return (1);
 	}
 	set_fov(&g, g.map_info->player_dir);
-	// fill_world_map(&g);
-	if(convert_char_map_to_int(&g) == 1)
-	{
-		cleanup(&g);
-		return (1);
-	}
-	// convert_char_map_to_int(&g);
-	
+	if (convert_char_map_to_int(&g) == 1)
+		return (cleanup(&g), 1);
 	find_player_pos(&g);
 	if (!load_textures(&g))
-	{
-		// free_int_map(g.world_map, g.map_info->map_height);
-		cleanup(&g);
-		print_error("Failed to load textures", g.map_info);
-		return (1);
-	}
+		return (cleanup(&g), print_error("Failed to load textures",
+				g.map_info), 1);
 	render_frame(&g);
 	mlx_key_hook(g.win, handle_key, &g);
 	mlx_hook(g.win, 17, 0, handle_exit, &g);
