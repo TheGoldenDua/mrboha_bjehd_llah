@@ -6,7 +6,7 @@
 /*   By: aourhou <aourhou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/22 15:48:37 by aourhou           #+#    #+#             */
-/*   Updated: 2025/05/22 15:48:38 by aourhou          ###   ########.fr       */
+/*   Updated: 2025/05/22 16:51:59 by aourhou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,9 @@ int	big_bang(t_game g)
 	g.mlx = mlx_init();
 	if (!g.mlx)
 		return (cleanup(&g), 1);
+	if (!load_textures(&g))
+		return (cleanup(&g), print_error("Failed to load textures", g.map_info),
+			1);
 	g.win = mlx_new_window(g.mlx, WIDTH, HEIGHT, "Raycaster JiBooR");
 	g.img = mlx_new_image(g.mlx, WIDTH, HEIGHT);
 	g.img_data = mlx_get_data_addr(g.img, &g.bpp, &g.size_line, &g.endian);
@@ -29,9 +32,6 @@ int	big_bang(t_game g)
 	if (convert_char_map_to_int(&g) == 1)
 		return (cleanup(&g), 1);
 	find_player_pos(&g);
-	if (!load_textures(&g))
-		return (cleanup(&g), print_error("Failed to load textures", g.map_info),
-			1);
 	render_frame(&g);
 	mlx_key_hook(g.win, handle_key, &g);
 	mlx_hook(g.win, 17, 0, handle_exit, &g);
