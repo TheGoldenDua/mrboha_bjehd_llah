@@ -6,7 +6,7 @@
 /*   By: aourhou <aourhou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 12:32:05 by del-ganb          #+#    #+#             */
-/*   Updated: 2025/05/22 15:22:00 by aourhou          ###   ########.fr       */
+/*   Updated: 2025/05/22 15:43:57 by aourhou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,9 @@
 # include "../get_next_line/get_next_line.h"
 # include <fcntl.h>
 # include <math.h>
+# include <mlx.h>
 # include <stdio.h>
 # include <stdlib.h>
-# include <math.h>
-# include <mlx.h>
 # include <unistd.h>
 
 # define WIDTH 2048
@@ -113,15 +112,6 @@ typedef struct s_game
 	int		**world_map;
 }			t_game;
 
-int			convert_char_map_to_int(t_game *g);
-void		free_int_map(int **int_map, int height);
-int			big_bang(t_game g);
-void		mix_textures(t_game *g, t_map map);
-int			handle_key(int key, t_game *g);
-int			handle_exit(t_game *g);
-void		render_frame(t_game *g);
-void		cleanup(t_game *g);
-
 //memory management and error handling
 void		free_array(char ***arr);
 void		free_wall(char **wall);
@@ -184,5 +174,38 @@ void		*free_split(char **str);
 char		**ft_split(char const *s, char c);
 void		*ft_memcpy(void *dest, const void *src, size_t n);
 void		*ft_memset(void *s, int c, size_t n);
+
+//execution functions
+void		calc_wall_and_tex(t_ray *r, t_game *g);
+int			load_textures(t_game *g);
+int			load_texture_img(t_game *g, int idx, char *filename);
+void		calc_draw_limits(t_ray *r);
+void		calc_perp_wall_dist(t_ray *r, t_game *g);
+void		perform_dda(t_game *g, t_ray *r);
+void		init_dda(t_game *g, t_ray *r);
+void		init_ray_vars(t_game *g, int x, t_ray *r);
+void		render_frame(t_game *g);
+void		cast_ray(t_game *g, int x);
+void		draw_wall_and_floor(t_game *g, int x, t_ray *r);
+int			calc_step_y(int y);
+int			calc_step_x(int x);
+double		ft_check_collision(t_game *g, double new_pos_x, double new_pos_y);
+void		get_move_vector(int key, t_game *g, double *move_x, double *move_y);
+void		handle_movement(int key, t_game *g);
+void		handle_rotation(int key, t_game *g);
+int			handle_key(int key, t_game *g);
+int			handle_exit(t_game *g);
+void		purge(t_game *g, int y);
+int			convert_char_map_to_int(t_game *g);
+void		free_int_map(int **int_map, int height);
+void		put_pixel_to_image(t_game *g, int x, int y, int color);
+void		clear_image(t_game *g);
+void		draw_ceiling_and_floor(t_game *g, int x, int draw_start,
+				int draw_end);
+void		cleanup(t_game *g);
+void		set_fov_assist(t_game *g, char c);
+void		set_fov(t_game *g, char c);
+void		find_player_pos(t_game *g);
+int			big_bang(t_game g);
 
 #endif
