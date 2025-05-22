@@ -345,12 +345,18 @@ void	render_frame(t_game *g)
 double	ft_check_collision(t_game *g, double new_pos_x, double new_pos_y)
 {
 	double	hitbox;
+	double	x;
+	double	y;
+	double	xx;
 
 	hitbox = 0.02;
-	if (g->world_map[(int)(new_pos_y + hitbox)][(int)(new_pos_x + hitbox)] > 0 ||
-		g->world_map[(int)(new_pos_y - hitbox)][(int)(new_pos_x + hitbox)] > 0 ||
-		g->world_map[(int)(new_pos_y + hitbox)][(int)(new_pos_x - hitbox)] > 0 ||
-		g->world_map[(int)(new_pos_y - hitbox)][(int)(new_pos_x - hitbox)] > 0)
+	x = new_pos_x + hitbox;
+	y = new_pos_y + hitbox;
+	xx = new_pos_x - hitbox;
+	if (g->world_map[(int)(y)][(int)(x)] > 0 ||
+		g->world_map[(int)(new_pos_y - hitbox)][(int)(x)] > 0 ||
+		g->world_map[(int)(y)][(int)(xx)] > 0 ||
+		g->world_map[(int)(new_pos_y - hitbox)][(int)(xx)] > 0)
 		return (0);
 	return (1);
 }
