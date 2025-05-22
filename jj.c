@@ -287,29 +287,24 @@ int	calc_step_y(int y)
 
 void	draw_wall_and_floor(t_game *g, int x, t_ray *r)
 {
-	int		tex_num;
-	int		y;
-	int		tex_y;
-	int		color;
-	double	step;
-	double	tex_pos;
+	t_draw_wall_vars	v;
 
 	if (r->side == 0)
-		tex_num = calc_step_x(r->side);
+		v.tex_num = calc_step_x(r->side);
 	else
-		tex_num = calc_step_y(r->step_y);
-	step = 1.0 * TEX_HEIGHT / r->line_height;
-	tex_pos = (r->draw_start - HEIGHT / 2 + r->line_height / 2) * step;
-	y = r->draw_start;
-	while (y < r->draw_end)
+		v.tex_num = calc_step_y(r->step_y);
+	v.step = 1.0 * TEX_HEIGHT / r->line_height;
+	v.tex_pos = (r->draw_start - HEIGHT / 2 + r->line_height / 2) * v.step;
+	v.y = r->draw_start;
+	while (v.y < r->draw_end)
 	{
-		tex_y = (int)tex_pos & (TEX_HEIGHT - 1);
-		tex_pos += step;
-		color = g->textures[tex_num][TEX_HEIGHT * tex_y + r->tex_x];
+		v.tex_y = (int)v.tex_pos & (TEX_HEIGHT - 1);
+		v.tex_pos += v.step;
+		v.color = g->textures[v.tex_num][TEX_HEIGHT * v.tex_y + r->tex_x];
 		if (r->side == 1)
-			color = (color >> 1) & 8355711;
-		put_pixel_to_image(g, x, y, color);
-		y++;
+			v.color = (v.color >> 1) & 8355711;
+		put_pixel_to_image(g, x, v.y, v.color);
+		v.y++;
 	}
 	draw_ceiling_and_floor(g, x, r->draw_start, r->draw_end);
 }

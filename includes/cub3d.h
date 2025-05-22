@@ -6,20 +6,38 @@
 /*   By: aourhou <aourhou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 12:32:05 by del-ganb          #+#    #+#             */
-/*   Updated: 2025/05/22 14:43:35 by aourhou          ###   ########.fr       */
+/*   Updated: 2025/05/22 15:22:00 by aourhou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
-# include <math.h>
 # include "../get_next_line/get_next_line.h"
 # include <fcntl.h>
+# include <math.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include <math.h>
+# include <mlx.h>
+# include <unistd.h>
 
-
+# define WIDTH 2048
+# define HEIGHT 1080
+# define MOVE_SPEED 0.5
+# define ROT_SPEED 0.05
+# define MAP_WIDTH 16
+# define MAP_HEIGHT 5
+# define NUM_TEXTURES 4
+# define TEX_HEIGHT 32
+# define TEX_WIDTH 32
+# define ESC_KEY 65307
+# define FORWARD_KEY 65362
+# define BACKWARD_KEY 65364
+# define LEFT_KEY 65361
+# define RIGHT_KEY 65363
+# define LEFT_ARROW_KEY 97
+# define RIGHT_ARROW_KEY 100
 
 typedef struct s_map
 {
@@ -37,27 +55,38 @@ typedef struct s_map
 	int		map_width;
 }			t_map;
 
-#include <math.h>
-#include <mlx.h>
-#include <stdlib.h>
-#include <unistd.h>
+typedef struct s_draw_wall_vars
+{
+	int		tex_num;
+	int		y;
+	int		tex_y;
+	int		color;
+	double	step;
+	double	tex_pos;
+}			t_draw_wall_vars;
 
-#define WIDTH 2048
-#define HEIGHT 1080
-#define MOVE_SPEED 0.5
-#define ROT_SPEED 0.05
-#define MAP_WIDTH 16
-#define MAP_HEIGHT 5
-#define NUM_TEXTURES 4
-#define TEX_HEIGHT 32
-#define TEX_WIDTH 32
-#define ESC_KEY 65307
-#define FORWARD_KEY 65362
-#define BACKWARD_KEY 65364
-#define LEFT_KEY 65361
-#define RIGHT_KEY 65363
-#define LEFT_ARROW_KEY 97
-#define RIGHT_ARROW_KEY 100
+typedef struct s_ray
+{
+	double	raydir_x;
+	double	camera_x;
+	double	raydir_y;
+	double	deltadist_x;
+	double	deltadist_y;
+	double	sidedist_x;
+	double	sidedist_y;
+	double	perpwalldist;
+	double	wall_x;
+	int		map_x;
+	int		map_y;
+	int		step_x;
+	int		step_y;
+	int		side;
+	int		hit;
+	int		line_height;
+	int		draw_start;
+	int		draw_end;
+	int		tex_x;
+}			t_ray;
 
 typedef struct s_game
 {
@@ -84,23 +113,14 @@ typedef struct s_game
 	int		**world_map;
 }			t_game;
 
-typedef struct s_ray
-{
-	double camera_x, raydir_x, raydir_y;
-	int map_x, map_y, step_x, step_y, side, hit;
-	double deltadist_x, deltadist_y, sidedist_x, sidedist_y;
-	double perpwalldist, wall_x;
-	int line_height, draw_start, draw_end, tex_x;
-}			t_ray;
-
-int convert_char_map_to_int(t_game *g);
-void free_int_map(int **int_map, int height);
-int	big_bang(t_game g);
-void mix_textures(t_game *g, t_map map);
-int	handle_key(int key, t_game *g);
-int	handle_exit(t_game *g);
-void	render_frame(t_game *g);
-void	cleanup(t_game *g);
+int			convert_char_map_to_int(t_game *g);
+void		free_int_map(int **int_map, int height);
+int			big_bang(t_game g);
+void		mix_textures(t_game *g, t_map map);
+int			handle_key(int key, t_game *g);
+int			handle_exit(t_game *g);
+void		render_frame(t_game *g);
+void		cleanup(t_game *g);
 
 //memory management and error handling
 void		free_array(char ***arr);
@@ -164,8 +184,5 @@ void		*free_split(char **str);
 char		**ft_split(char const *s, char c);
 void		*ft_memcpy(void *dest, const void *src, size_t n);
 void		*ft_memset(void *s, int c, size_t n);
-
-
-
 
 #endif
