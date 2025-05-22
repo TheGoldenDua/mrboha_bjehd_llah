@@ -6,7 +6,7 @@
 /*   By: aourhou <aourhou@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/05/19 12:32:05 by del-ganb          #+#    #+#             */
-/*   Updated: 2025/05/21 20:41:47 by aourhou          ###   ########.fr       */
+/*   Updated: 2025/05/22 14:43:35 by aourhou          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,12 +68,12 @@ typedef struct s_game
 	int		endian;
 	void	*img;
 	char	*img_data;
-	double	posX;
-	double	posY;
-	double	dirX;
-	double	dirY;
-	double	planeX;
-	double	planeY;
+	double	pos_x;
+	double	pos_y;
+	double	dir_x;
+	double	dir_y;
+	double	plane_x;
+	double	plane_y;
 	int		textures[NUM_TEXTURES][TEX_WIDTH * TEX_HEIGHT];
 	void	*tex_img[NUM_TEXTURES];
 	char	*tex_data[NUM_TEXTURES];
@@ -86,11 +86,11 @@ typedef struct s_game
 
 typedef struct s_ray
 {
-	double cameraX, rayDirX, rayDirY;
-	int mapX, mapY, stepX, stepY, side, hit;
-	double deltaDistX, deltaDistY, sideDistX, sideDistY;
-	double perpWallDist, wallX;
-	int lineHeight, drawStart, drawEnd, texX;
+	double camera_x, raydir_x, raydir_y;
+	int map_x, map_y, step_x, step_y, side, hit;
+	double deltadist_x, deltadist_y, sidedist_x, sidedist_y;
+	double perpwalldist, wall_x;
+	int line_height, draw_start, draw_end, tex_x;
 }			t_ray;
 
 int convert_char_map_to_int(t_game *g);

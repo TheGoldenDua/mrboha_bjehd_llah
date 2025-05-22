@@ -27,17 +27,17 @@ void	set_fov_assist(t_game *g, char c)
 {
 	if (c == 'E')
 	{
-		g->dirX = 1;
-		g->dirY = 0;
-		g->planeX = 0;
-		g->planeY = 0.66;
+		g->dir_x = 1;
+		g->dir_y = 0;
+		g->plane_x = 0;
+		g->plane_y = 0.66;
 	}
 	else if (c == 'W')
 	{
-		g->dirX = -1;
-		g->dirY = 0;
-		g->planeX = 0;
-		g->planeY = -0.66;
+		g->dir_x = -1;
+		g->dir_y = 0;
+		g->plane_x = 0;
+		g->plane_y = -0.66;
 	}
 }
 
@@ -45,17 +45,17 @@ void	set_fov(t_game *g, char c)
 {
 	if (c == 'N')
 	{
-		g->dirX = 0;
-		g->dirY = -1;
-		g->planeX = 0.66;
-		g->planeY = 0;
+		g->dir_x = 0;
+		g->dir_y = -1;
+		g->plane_x = 0.66;
+		g->plane_y = 0;
 	}
 	else if (c == 'S')
 	{
-		g->dirX = 0;
-		g->dirY = 1;
-		g->planeX = -0.66;
-		g->planeY = 0;
+		g->dir_x = 0;
+		g->dir_y = 1;
+		g->plane_x = -0.66;
+		g->plane_y = 0;
 	}
 	else if (c == 'E' || c == 'W')
 		set_fov_assist(g, c);
@@ -63,8 +63,8 @@ void	set_fov(t_game *g, char c)
 
 void	find_player_pos(t_game *g)
 {
-	g->posX = g->map_info->player_x;
-	g->posY = g->map_info->player_y;
+	g->pos_x = g->map_info->player_x;
+	g->pos_y = g->map_info->player_y;
 }
 /* ---- Section 2: Texture Loading ---- */
 
@@ -148,14 +148,14 @@ void	clear_image(t_game *g)
 	}
 }
 
-void	draw_ceiling_and_floor(t_game *g, int x, int drawStart, int drawEnd)
+void	draw_ceiling_and_floor(t_game *g, int x, int draw_start, int draw_end)
 {
 	int	y;
 
 	y = 0;
-	while (y < drawStart)
+	while (y < draw_start)
 		put_pixel_to_image(g, x, y++, g->map_info->ceiling_clr);
-	y = drawEnd + 1;
+	y = draw_end + 1;
 	while (y < HEIGHT)
 		put_pixel_to_image(g, x, y++, g->map_info->floor_clr);
 }
@@ -163,42 +163,42 @@ void	draw_ceiling_and_floor(t_game *g, int x, int drawStart, int drawEnd)
 /* ---- Section 4: Raycasting ---- */
 void	init_ray_vars(t_game *g, int x, t_ray *r)
 {
-	r->cameraX = 2 * x / (double)WIDTH - 1;
-	r->rayDirX = g->dirX + g->planeX * r->cameraX;
-	r->rayDirY = g->dirY + g->planeY * r->cameraX;
-	r->mapX = (int)g->posX;
-	r->mapY = (int)g->posY;
-	if (r->rayDirX == 0)
-		r->deltaDistX = 1e30;
+	r->camera_x = 2 * x / (double)WIDTH - 1;
+	r->raydir_x = g->dir_x + g->plane_x * r->camera_x;
+	r->raydir_y = g->dir_y + g->plane_y * r->camera_x;
+	r->map_x = (int)g->pos_x;
+	r->map_y = (int)g->pos_y;
+	if (r->raydir_x == 0)
+		r->deltadist_x = 1e30;
 	else
-		r->deltaDistX = fabs(1 / r->rayDirX);
-	if (r->rayDirY == 0)
-		r->deltaDistY = 1e30;
+		r->deltadist_x = fabs(1 / r->raydir_x);
+	if (r->raydir_y == 0)
+		r->deltadist_y = 1e30;
 	else
-		r->deltaDistY = fabs(1 / r->rayDirY);
+		r->deltadist_y = fabs(1 / r->raydir_y);
 }
 
 void	init_dda(t_game *g, t_ray *r)
 {
-	if (r->rayDirX < 0)
+	if (r->raydir_x < 0)
 	{
-		r->stepX = -1;
-		r->sideDistX = (g->posX - r->mapX) * r->deltaDistX;
+		r->step_x = -1;
+		r->sidedist_x = (g->pos_x - r->map_x) * r->deltadist_x;
 	}
 	else
 	{
-		r->stepX = 1;
-		r->sideDistX = (r->mapX + 1.0 - g->posX) * r->deltaDistX;
+		r->step_x = 1;
+		r->sidedist_x = (r->map_x + 1.0 - g->pos_x) * r->deltadist_x;
 	}
-	if (r->rayDirY < 0)
+	if (r->raydir_y < 0)
 	{
-		r->stepY = -1;
-		r->sideDistY = (g->posY - r->mapY) * r->deltaDistY;
+		r->step_y = -1;
+		r->sidedist_y = (g->pos_y - r->map_y) * r->deltadist_y;
 	}
 	else
 	{
-		r->stepY = 1;
-		r->sideDistY = (r->mapY + 1.0 - g->posY) * r->deltaDistY;
+		r->step_y = 1;
+		r->sidedist_y = (r->map_y + 1.0 - g->pos_y) * r->deltadist_y;
 	}
 }
 
@@ -207,21 +207,21 @@ void	perform_dda(t_game *g, t_ray *r)
 	r->hit = 0;
 	while (!r->hit)
 	{
-		if (r->sideDistX < r->sideDistY)
+		if (r->sidedist_x < r->sidedist_y)
 		{
-			r->sideDistX += r->deltaDistX;
-			r->mapX += r->stepX;
+			r->sidedist_x += r->deltadist_x;
+			r->map_x += r->step_x;
 			r->side = 0;
 		}
 		else
 		{
-			r->sideDistY += r->deltaDistY;
-			r->mapY += r->stepY;
+			r->sidedist_y += r->deltadist_y;
+			r->map_y += r->step_y;
 			r->side = 1;
 		}
-		if (r->mapX < 0 || r->mapX >= g->map_info->map_width
-			|| r->mapY < 0 || r->mapY >= g->map_info->map_height
-			|| g->world_map[r->mapY][r->mapX] > 0)
+		if (r->map_x < 0 || r->map_x >= g->map_info->map_width
+			|| r->map_y < 0 || r->map_y >= g->map_info->map_height
+			|| g->world_map[r->map_y][r->map_x] > 0)
 			r->hit = 1;
 	}
 }
@@ -229,39 +229,46 @@ void	perform_dda(t_game *g, t_ray *r)
 void	calc_perp_wall_dist(t_ray *r, t_game *g)
 {
 	if (r->side == 0)
-		r->perpWallDist = (r->mapX - g->posX + (1 - r->stepX) / 2) / r->rayDirX;
+	{
+		r->perpwalldist = (r->map_x - g->pos_x + (1 - r->step_x) / 2)
+			/ r->raydir_x;
+	}
 	else
-		r->perpWallDist = (r->mapY - g->posY + (1 - r->stepY) / 2) / r->rayDirY;
-	if (r->perpWallDist < 0.000001f)
-		r->perpWallDist = 0.000001;
+	{
+		r->perpwalldist = (r->map_y - g->pos_y + (1 - r->step_y) / 2)
+			/ r->raydir_y;
+	}
+	if (r->perpwalldist < 0.000001f)
+		r->perpwalldist = 0.000001;
 }
 
 void	calc_draw_limits(t_ray *r)
 {
-	double	aspectRatio;
+	double	aspect_ratio;
 
-	aspectRatio = (double)WIDTH / HEIGHT;
-	r->lineHeight = (int)((HEIGHT * 0.8) / r->perpWallDist * aspectRatio);
-	r->drawStart = -r->lineHeight / 2 + HEIGHT / 2;
-	if (r->drawStart < 0)
-		r->drawStart = 0;
-	r->drawEnd = r->lineHeight / 2 + HEIGHT / 2;
-	if (r->drawEnd >= HEIGHT)
-		r->drawEnd = HEIGHT - 1;
+	aspect_ratio = (double)WIDTH / HEIGHT;
+	r->line_height = (int)((HEIGHT * 0.8) / r->perpwalldist * aspect_ratio);
+	r->draw_start = -r->line_height / 2 + HEIGHT / 2;
+	if (r->draw_start < 0)
+		r->draw_start = 0;
+	r->draw_end = r->line_height / 2 + HEIGHT / 2;
+	if (r->draw_end >= HEIGHT)
+		r->draw_end = HEIGHT - 1;
 }
 
 /* ---- Section 5: Raycasting Drawing ---- */
 void	calc_wall_and_tex(t_ray *r, t_game *g)
 {
 	if (r->side == 0)
-		r->wallX = g->posY + r->perpWallDist * r->rayDirY;
+		r->wall_x = g->pos_y + r->perpwalldist * r->raydir_y;
 	else
-		r->wallX = g->posX + r->perpWallDist * r->rayDirX;
-	r->wallX -= floor(r->wallX);
-	r->texX = (int)(r->wallX * (double)TEX_WIDTH);
-	if ((r->side == 0 && r->rayDirX > 0) || (r->side == 1 && r->rayDirY < 0))
-		r->texX = TEX_WIDTH - r->texX - 1;
+		r->wall_x = g->pos_x + r->perpwalldist * r->raydir_x;
+	r->wall_x -= floor(r->wall_x);
+	r->tex_x = (int)(r->wall_x * (double)TEX_WIDTH);
+	if ((r->side == 0 && r->raydir_x > 0) || (r->side == 1 && r->raydir_y < 0))
+		r->tex_x = TEX_WIDTH - r->tex_x - 1;
 }
+
 int	calc_step_x(int x)
 {
 	if (x > 0)
@@ -280,31 +287,31 @@ int	calc_step_y(int y)
 
 void	draw_wall_and_floor(t_game *g, int x, t_ray *r)
 {
-	int		texNum;
+	int		tex_num;
 	int		y;
-	int		texY;
+	int		tex_y;
 	int		color;
 	double	step;
-	double	texPos;
+	double	tex_pos;
 
 	if (r->side == 0)
-		texNum = calc_step_x(r->side);
+		tex_num = calc_step_x(r->side);
 	else
-		texNum = calc_step_y(r->stepY);
-	step = 1.0 * TEX_HEIGHT / r->lineHeight;
-	texPos = (r->drawStart - HEIGHT / 2 + r->lineHeight / 2) * step;
-	y = r->drawStart;
-	while (y < r->drawEnd)
+		tex_num = calc_step_y(r->step_y);
+	step = 1.0 * TEX_HEIGHT / r->line_height;
+	tex_pos = (r->draw_start - HEIGHT / 2 + r->line_height / 2) * step;
+	y = r->draw_start;
+	while (y < r->draw_end)
 	{
-		texY = (int)texPos & (TEX_HEIGHT - 1);
-		texPos += step;
-		color = g->textures[texNum][TEX_HEIGHT * texY + r->texX];
+		tex_y = (int)tex_pos & (TEX_HEIGHT - 1);
+		tex_pos += step;
+		color = g->textures[tex_num][TEX_HEIGHT * tex_y + r->tex_x];
 		if (r->side == 1)
 			color = (color >> 1) & 8355711;
 		put_pixel_to_image(g, x, y, color);
 		y++;
 	}
-	draw_ceiling_and_floor(g, x, r->drawStart, r->drawEnd);
+	draw_ceiling_and_floor(g, x, r->draw_start, r->draw_end);
 }
 
 void	cast_ray(t_game *g, int x)
@@ -335,86 +342,88 @@ void	render_frame(t_game *g)
 }
 
 /* ---- Section 6: Movement/Rotation ---- */
-double	ft_Check_collision(t_game *g, double newPosX, double newPosY)
+double	ft_check_collision(t_game *g, double new_pos_x, double new_pos_y)
 {
 	double	hitbox;
 
 	hitbox = 0.02;
-	if (g->world_map[(int)(newPosY + hitbox)][(int)(newPosX + hitbox)] > 0 ||
-		g->world_map[(int)(newPosY - hitbox)][(int)(newPosX + hitbox)] > 0 ||
-		g->world_map[(int)(newPosY + hitbox)][(int)(newPosX - hitbox)] > 0 ||
-		g->world_map[(int)(newPosY - hitbox)][(int)(newPosX - hitbox)] > 0)
+	if (g->world_map[(int)(new_pos_y + hitbox)][(int)(new_pos_x + hitbox)] > 0 ||
+		g->world_map[(int)(new_pos_y - hitbox)][(int)(new_pos_x + hitbox)] > 0 ||
+		g->world_map[(int)(new_pos_y + hitbox)][(int)(new_pos_x - hitbox)] > 0 ||
+		g->world_map[(int)(new_pos_y - hitbox)][(int)(new_pos_x - hitbox)] > 0)
 		return (0);
 	return (1);
 }
 
-void	get_move_vector(int key, t_game *g, double *moveX, double *moveY)
+void	get_move_vector(int key, t_game *g, double *move_x, double *move_y)
 {
-	*moveX = 0;
-	*moveY = 0;
+	*move_x = 0;
+	*move_y = 0;
 	if (key == FORWARD_KEY)
 	{
-		*moveX = g->dirX;
-		*moveY = g->dirY;
+		*move_x = g->dir_x;
+		*move_y = g->dir_y;
 	}
 	else if (key == BACKWARD_KEY)
 	{
-		*moveX = -g->dirX;
-		*moveY = -g->dirY;
+		*move_x = -g->dir_x;
+		*move_y = -g->dir_y;
 	}
 	else if (key == LEFT_KEY)
 	{
-		*moveX = -g->planeX;
-		*moveY = -g->planeY;
+		*move_x = -g->plane_x;
+		*move_y = -g->plane_y;
 	}
 	else if (key == RIGHT_KEY)
 	{
-		*moveX = g->planeX;
-		*moveY = g->planeY;
+		*move_x = g->plane_x;
+		*move_y = g->plane_y;
 	}
 }
 
 void	handle_movement(int key, t_game *g)
 {
-	double	moveX;
-	double	moveY;
-	double	newPosX;
-	double	newPosY;
+	double	move_x;
+	double	move_y;
+	double	new_pos_x;
+	double	new_pos_y;
 
-	get_move_vector(key, g, &moveX, &moveY);
-	if (moveX || moveY)
+	get_move_vector(key, g, &move_x, &move_y);
+	if (move_x || move_y)
 	{
-		newPosX = g->posX + moveX * MOVE_SPEED;
-		newPosY = g->posY + moveY * MOVE_SPEED;
-		if (ft_Check_collision(g, newPosX, g->posY))
-			g->posX = newPosX;
-		if (ft_Check_collision(g, g->posX, newPosY))
-			g->posY = newPosY;
+		new_pos_x = g->pos_x + move_x * MOVE_SPEED;
+		new_pos_y = g->pos_y + move_y * MOVE_SPEED;
+		if (ft_check_collision(g, new_pos_x, g->pos_y))
+			g->pos_x = new_pos_x;
+		if (ft_check_collision(g, g->pos_x, new_pos_y))
+			g->pos_y = new_pos_y;
 	}
 }
 
 void	handle_rotation(int key, t_game *g)
 {
-	double	oldDirX;
-	double	oldPlaneX;
+	double	old_dir_x;
+	double	old_plane_x;
 
 	if (key == LEFT_ARROW_KEY)
 	{
-		oldDirX = g->dirX;
-		g->dirX = g->dirX * cos(-ROT_SPEED) - g->dirY * sin(-ROT_SPEED);
-		g->dirY = oldDirX * sin(-ROT_SPEED) + g->dirY * cos(-ROT_SPEED);
-		oldPlaneX = g->planeX;
-		g->planeX = g->planeX * cos(-ROT_SPEED) - g->planeY * sin(-ROT_SPEED);
-		g->planeY = oldPlaneX * sin(-ROT_SPEED) + g->planeY * cos(-ROT_SPEED);
+		old_dir_x = g->dir_x;
+		g->dir_x = g->dir_x * cos(-ROT_SPEED) - g->dir_y * sin(-ROT_SPEED);
+		g->dir_y = old_dir_x * sin(-ROT_SPEED) + g->dir_y * cos(-ROT_SPEED);
+		old_plane_x = g->plane_x;
+		g->plane_x = g->plane_x * cos(-ROT_SPEED)
+			- g->plane_y * sin(-ROT_SPEED);
+		g->plane_y = old_plane_x * sin(-ROT_SPEED)
+			+ g->plane_y * cos(-ROT_SPEED);
 	}
 	else if (key == RIGHT_ARROW_KEY)
 	{
-		oldDirX = g->dirX;
-		g->dirX = g->dirX * cos(ROT_SPEED) - g->dirY * sin(ROT_SPEED);
-		g->dirY = oldDirX * sin(ROT_SPEED) + g->dirY * cos(ROT_SPEED);
-		oldPlaneX = g->planeX;
-		g->planeX = g->planeX * cos(ROT_SPEED) - g->planeY * sin(ROT_SPEED);
-		g->planeY = oldPlaneX * sin(ROT_SPEED) + g->planeY * cos(ROT_SPEED);
+		old_dir_x = g->dir_x;
+		g->dir_x = g->dir_x * cos(ROT_SPEED) - g->dir_y * sin(ROT_SPEED);
+		g->dir_y = old_dir_x * sin(ROT_SPEED) + g->dir_y * cos(ROT_SPEED);
+		old_plane_x = g->plane_x;
+		g->plane_x = g->plane_x * cos(ROT_SPEED) - g->plane_y * sin(ROT_SPEED);
+		g->plane_y = old_plane_x * sin(ROT_SPEED) + g->plane_y * cos(ROT_SPEED);
 	}
 }
 
